@@ -42,41 +42,49 @@ export const Signup: FC = () => {
 
   return (
     <form onSubmit={(e) => onSubmit(e)}>
-      <Input
-        value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
-        placeholder="First Name"
-      />
-      <Input
-        value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
-        placeholder="Last Name"
-      />
-      <Select value={dobM} onChange={(e) => setDobM(e.target.value as any)}>
-        <MenuItem value="">Month</MenuItem>
-        <MenuItem value={1}>{1}</MenuItem>
-        <MenuItem value={2}>{2}</MenuItem>
-        <MenuItem value={3}>{3}</MenuItem>
-        <MenuItem value={4}>{4}</MenuItem>
-        <MenuItem value={5}>{5}</MenuItem>
-        <MenuItem value={6}>{6}</MenuItem>
-        <MenuItem value={7}>{7}</MenuItem>
-        <MenuItem value={8}>{8}</MenuItem>
-        <MenuItem value={9}>{9}</MenuItem>
-        <MenuItem value={10}>{10}</MenuItem>
-        <MenuItem value={11}>{11}</MenuItem>
-        <MenuItem value={12}>{12}</MenuItem>
-      </Select>
-      <Input
-        value={dobY}
-        onChange={(e) => setDobY(e.target.value as any)}
-        placeholder="Year"
-      />
-      <Input
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="email"
-      />
+      <div>
+        <Input
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="First Name"
+        />
+        <Input
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          placeholder="Last Name"
+        />
+      </div>
+      <div>
+        <p>DOB Month</p>
+        <Select value={dobM} onChange={(e) => setDobM(e.target.value as any)}>
+          <MenuItem value="">Month</MenuItem>
+          <MenuItem value={1}>{1}</MenuItem>
+          <MenuItem value={2}>{2}</MenuItem>
+          <MenuItem value={3}>{3}</MenuItem>
+          <MenuItem value={4}>{4}</MenuItem>
+          <MenuItem value={5}>{5}</MenuItem>
+          <MenuItem value={6}>{6}</MenuItem>
+          <MenuItem value={7}>{7}</MenuItem>
+          <MenuItem value={8}>{8}</MenuItem>
+          <MenuItem value={9}>{9}</MenuItem>
+          <MenuItem value={10}>{10}</MenuItem>
+          <MenuItem value={11}>{11}</MenuItem>
+          <MenuItem value={12}>{12}</MenuItem>
+        </Select>
+        <p>DOB Year</p>
+        <Input
+          value={dobY}
+          onChange={(e) => setDobY(e.target.value as any)}
+          placeholder="Year"
+        />
+      </div>
+      <div>
+        <Input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="email"
+        />
+      </div>
       <Button type="submit">Create User</Button>
     </form>
   );
