@@ -17,62 +17,57 @@
 import { Button, Input } from "@mui/material";
 import { FC, FormEvent, useContext, useState } from "react";
 import { createFood } from "../services/food";
-import { UserContext } from "../App";
+import { GlobalVarContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export const NewFood: FC = () => {
-  const { loggedUser } = useContext(UserContext);
+  const { loggedUser } = useContext(GlobalVarContext);
+  let navigate = useNavigate();
 
   if (!loggedUser) {
-    return "Field Weight is mandatory";
-  } else {
-    const [foodName, setFoodName] = useState("");
-    const [isoWeight, setIsoWeight] = useState(0);
-    const [isoCalories, setIsoCalories] = useState(0);
-    const [isoUnit, setIsoUnit] = useState("g");
-
-    const onSubmit = async (e: FormEvent) => {
-      e.preventDefault();
-      const createdAt = Date.now();
-      const userId = loggedUser as any;
-      await createFood({
-        createdAt,
-        userId,
-        foodName,
-        isoWeight,
-        isoCalories,
-        isoUnit,
-      });
-      await clearForm();
-    };
-
-    const clearForm = async () => {
-      setFoodName("");
-      setIsoWeight(0);
-      setIsoCalories(0);
-      setIsoUnit("g");
-    };
-
-    return (
-      <form onSubmit={(e) => onSubmit(e)}>
-        <div>
-          <Input
-            value={foodName}
-            onChange={(e) => setFoodName(e.target.value)}
-            placeholder="Food Name"
-          />
-          <Input
-            value={isoWeight}
-            onChange={(e) => setIsoWeight(e.target.value as any)}
-            placeholder="ISO Weight"
-          />
-          <Input
-            value={isoCalories}
-            onChange={(e) => setIsoCalories(e.target.value as any)}
-            placeholder="Year"
-          />
-        </div>
-        <Button type="submit">Create Food</Button>
-      </form>
-    );
+    navigate("/login");
   }
+
+  const [foodName, setFoodName] = useState("");
+  const [isoWeight, setIsoWeight] = useState(0);
+  const [isoCalories, setIsoCalories] = useState(0);
+  const [isoUnit, setIsoUnit] = useState("g");
+
+  const onSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    const createdAt = Date.now();
+    const userId = loggedUser as any;
+    await createFood({
+      createdAt,
+      userId,
+      foodName,
+      isoWeight,
+      isoCalories,
+      isoUnit,
+    });
+    navigate("/home");
+  };
+
+  return (
+    <form onSubmit={(e) => onSubmit(e)}>
+      <div>
+        <Input
+          value={foodName}
+          onChange={(e) => setFoodName(e.target.value)}
+          placeholder="Food Name"
+        />
+        <Input
+          value={isoWeight}
+          onChange={(e) => setIsoWeight(e.target.value as any)}
+          placeholder="ISO Weight"
+        />
+        <Input
+          value={isoCalories}
+          onChange={(e) => setIsoCalories(e.target.value as any)}
+          placeholder="Year"
+        />
+      </div>
+      <Button type="submit">Create Food</Button>
+    </form>
+  );
 };

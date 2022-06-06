@@ -25,13 +25,7 @@ export const Goal: FC = () => {
     <>
       <p>Set your Goals</p>
 
-      <Button
-        onClick={() => {
-          handleGoals;
-        }}
-      >
-        save
-      </Button>
+      <Button onClick={handleGoals}>Save</Button>
       <Button onClick={() => navigate("/home")}>Sign Up</Button>
     </>
   );

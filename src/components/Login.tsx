@@ -4,7 +4,8 @@
 // On click the Login button, if user exists, it will redirect to Home page
 // If user doesn't exists, error message will show email/password incorrect
 
-import React, { useContext, FC } from "react";
+import { useState, useContext, FC, FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
 import {
   getAuth,
@@ -15,21 +16,7 @@ import {
 import { initializeApp } from "@firebase/app";
 import { Button, Input } from "@mui/material";
 
-import {
-  Paper,
-  Box,
-  Grid,
-  TextField,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-} from "@material-ui/core";
-
-// Import the functions you need from the SDKs you need
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
+// Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBDNy_hyDSaDW0TqK_JWvBIsdbLAh3mf-o",
   authDomain: "my-first-firestore-rh.firebaseapp.com",
@@ -46,13 +33,15 @@ const connectAuth = () => {
 
 export const Login: FC = () => {
   const { setLoggedUser } = useContext(GlobalVarContext);
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+  let navigate = useNavigate();
 
-  setLoggedUser("629d5a6e28443a8630297536");
-
-  const handleLogin = ({ email, password }) => {
+  const handleLogin = () => {
     const auth = connectAuth();
-    signInWithEmailAndPassword(auth, email, password) // Login with Firebase Authentication API
+    signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
       .then((res) => setLoggedUser(res.user))
+      .then(() => navigate("/home"))
       .catch(console.error);
   };
 
@@ -66,30 +55,22 @@ export const Login: FC = () => {
 
   return (
     <section style={{ padding: "2em" }}>
-      <form>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="email"
-            name="email"
-            label="Email"
-            fullWidth
-            margin="dense"
-          />
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <TextField
-            required
-            id="password"
-            name="password"
-            label="Password"
-            type="password"
-            fullWidth
-            margin="dense"
-          />
-        </Grid>
+      <form onSubmit={handleLogin}>
+        <Input
+          //value={email}
+          name="email"
+          //onChange={(e) => setEmail(e.target.value)}
+          placeholder="Email"
+        />
+        <Input
+          type="password"
+          //value={password}
+          name="password"
+          //onChange={(e) => setPassword(e.target.value)}
+          placeholder="Password"
+        />
 
-        <Button type="submit">Create User</Button>
+        <Button type="submit">Login</Button>
         <Button onClick={handleGoogleLogin}>Google Login</Button>
       </form>
     </section>

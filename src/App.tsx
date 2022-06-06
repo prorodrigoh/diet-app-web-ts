@@ -1,6 +1,6 @@
 import "./App.css";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
-import { createContext, useContext, FC, useState } from "react";
+import { createContext, FC, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Signup } from "./components/Signup";
 import { NewFood } from "./components/Food";
@@ -40,7 +40,7 @@ export const GlobalVarContext = createContext<GlobalContent>({
   setLoggedUser: () => {},
 }); // higher order component to store global values to be used throughout the application
 
-export const globalVarContext = () => useContext(GlobalVarContext);
+// export const globalVarContext = useContext(GlobalVarContext);
 
 export const App: FC = () => {
   const [loggedUser, setLoggedUser] = useState(); // user evaluates to falsy at first
