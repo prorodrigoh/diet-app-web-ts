@@ -1,7 +1,7 @@
 import { getClient } from "./client";
 
 export interface Food {
-  createAt: number;
+  createdAt: number;
   userId: string;
   name: string;
   ISOWeight: number;
