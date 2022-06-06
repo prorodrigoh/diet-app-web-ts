@@ -4,14 +4,15 @@
 // On click the Login button, if user exists, it will redirect to Home page
 // If user doesn't exists, error message will show email/password incorrect
 
-import React, { useContext } from "react";
-import { UserContext } from "../App";
+import React, { useContext, FC } from "react";
+import { GlobalVarContext } from "../App";
 import {
   getAuth,
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-} from "firebase/auth";
+} from "@firebase/auth";
+import { initializeApp } from "@firebase/app";
 import { Button, Input } from "@mui/material";
 
 import {
@@ -43,13 +44,15 @@ const connectAuth = () => {
   return getAuth(app); // Connect to Firebase/Authentication
 };
 
-export default function Login() {
-  const { setUser } = useContext(UserContext);
+export const Login: FC = () => {
+  const { setLoggedUser } = useContext(GlobalVarContext);
+
+  setLoggedUser("629d5a6e28443a8630297536");
 
   const handleLogin = ({ email, password }) => {
     const auth = connectAuth();
     signInWithEmailAndPassword(auth, email, password) // Login with Firebase Authentication API
-      .then((res) => setUser(res.user))
+      .then((res) => setLoggedUser(res.user))
       .catch(console.error);
   };
 
@@ -57,7 +60,7 @@ export default function Login() {
     const auth = connectAuth();
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((res) => setUser(res.user))
+      .then((res) => setLoggedUser(res.user))
       .catch(console.error);
   };
 
@@ -91,4 +94,4 @@ export default function Login() {
       </form>
     </section>
   );
-}
+};
