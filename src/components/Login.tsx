@@ -38,11 +38,13 @@ export const Login: FC = () => {
   let navigate = useNavigate();
 
   const handleLogin = () => {
-    const auth = connectAuth();
-    signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
-      .then((res) => setLoggedUser(res.user))
-      .then(() => navigate("/home"))
-      .catch(console.error);
+    // const auth = connectAuth();
+    // signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
+    //   .then((res) => setLoggedUser(res.user))
+    //   .then(() => navigate("/home"))
+    //   .catch(console.error);
+    setLoggedUser("629d5a6e28443a8630297536"); // for test purposes
+    navigate("/home");
   };
 
   const handleGoogleLogin = () => {

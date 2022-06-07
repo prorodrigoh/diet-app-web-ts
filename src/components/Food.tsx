@@ -1,3 +1,7 @@
+//
+//  >>>>>>>>>>>>>>>>>>>>>>>>    TESTED - It is inserting correctly into DB
+//
+
 // Phase 1 - b
 
 // Input field Weight Consumed is mandatory and when it is set, food buttons and create new are // enabled
@@ -52,19 +56,22 @@ export const NewFood: FC = () => {
     <form onSubmit={(e) => onSubmit(e)}>
       <div>
         <Input
-          value={foodName}
-          onChange={(e) => setFoodName(e.target.value)}
+          name="foodName"
           placeholder="Food Name"
+          // value={foodName}
+          onChange={(e) => setFoodName(e.target.value)}
         />
         <Input
-          value={isoWeight}
+          name="isoWeight"
+          placeholder="ISO Weight (g)"
+          // value={isoWeight}
           onChange={(e) => setIsoWeight(e.target.value as any)}
-          placeholder="ISO Weight"
         />
         <Input
-          value={isoCalories}
+          name="isoCalories"
+          placeholder="ISO Calories"
+          // value={isoCalories}
           onChange={(e) => setIsoCalories(e.target.value as any)}
-          placeholder="Year"
         />
       </div>
       <Button type="submit">Create Food</Button>
