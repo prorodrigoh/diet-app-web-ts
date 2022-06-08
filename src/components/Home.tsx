@@ -6,24 +6,10 @@ import {
   Input,
   Radio,
   RadioGroup,
-  TextField,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {
-  ChangeEvent,
-  FC,
-  SyntheticEvent,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Food,
-  getAllFoods,
-  getAllFoodsByUser,
-  getFoodById,
-} from "../services/food";
+import { Food, getAllFoods, getFoodById } from "../services/food";
 import { GlobalVarContext } from "../App";
 import { createCPW } from "../services/cpw";
 
@@ -43,41 +29,28 @@ export const Home: FC = () => {
   const { loggedUser } = useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [foodWeight, setFoodWeight] = useState(0);
-  const [isoWeight, setIsoWeight] = useState(0);
-  const [foodCalories, setFoodCalories] = useState(0);
-  const [isoCalories, setIsoCalories] = useState(0);
   const [foodId, setFoodId] = useState("");
   const [foods, setFoods] = useState<Food[]>([]);
-
+  let foodCalories = 0;
   useEffect(() => {
-    // getAllFoodsByUser(loggedUser).then((e) => (!e ? setFoods : console.log(e)));
     getAllFoods().then(setFoods);
   }, [foods]);
 
-  useEffect(() => {
-    calculateCPW();
-  }, [foodWeight]);
-
   const handleInputWeight = (event: ChangeEvent<HTMLInputElement>) => {
     setFoodWeight((event.target as HTMLInputElement).value as any);
-    console.log("handleInputWeight: ", foodWeight);
   };
 
   const handleRadioSelect = (event: ChangeEvent<HTMLInputElement>) => {
     setFoodId((event.target as HTMLInputElement).value);
-    console.log("handleRadioSelect: ", foodId);
   };
 
   const calculateCPW = async () => {
     const data = await getFoodById(foodId);
-    setFoodCalories((foodWeight * data.isoCalories) / data.isoWeight);
-    setIsoWeight(data.isoWeight);
-    setIsoCalories(data.isoCalories);
-    console.log(foodId, foodCalories, foodWeight, isoCalories, isoWeight);
+    foodCalories = (foodWeight * data.isoCalories) / data.isoWeight;
   };
 
   const handleCreateCPW = async () => {
-    await calculateCPW;
+    await calculateCPW();
     const createdAt = Date.now();
     await createCPW({
       createdAt,
@@ -102,14 +75,14 @@ export const Home: FC = () => {
       </div>
       <div>
         <FormControl>
-          <FormLabel id="demo-controlled-radio-buttons-group">
+          <FormLabel id="radio-buttons-group-label">
             List of foods already in the DB - Click to select, add Food Weight
             to add to the daily consumption
           </FormLabel>
           <RadioGroup
-            aria-labelledby="radio-buttons-group"
+            aria-labelledby="radio-buttons-group-label"
             name="radio-buttons-group"
-            // value={value}
+            value={foodId}
             onChange={handleRadioSelect}
           >
             {foods.map((food) => {
@@ -124,37 +97,20 @@ export const Home: FC = () => {
             })}
           </RadioGroup>
         </FormControl>
-        {/* <List>
-          {foods.map((food, index) => {
-            return (
-              <ListItem key={food._id}>
-                {food.foodName +
-                  ": " +
-                  food.isoWeight +
-                  "g & " +
-                  food.isoCalories +
-                  "cal"}
-              </ListItem>
-            );
-          })}
-        </List> */}
       </div>
       <div>
-        <Input
-          name="foodWeight"
-          placeholder="Food Weight (g)"
-          onChange={handleInputWeight}
-          // onChange={(e) => setFoodWeight(e.target.value as any)}
-        />
-        <TextField
-          id="outlined-read-only-input"
-          label="Calculated Calories"
-          defaultValue={foodCalories + " cal"}
-          InputProps={{
-            readOnly: true,
-          }}
-        />
-        <Button onClick={handleCreateCPW}>Add Food</Button>
+        <>
+          <Input
+            name="foodWeight"
+            placeholder="Food Weight (g)"
+            onChange={handleInputWeight}
+          />
+          {!foodWeight ? (
+            <Button disabled>Add Food</Button>
+          ) : (
+            <Button onClick={handleCreateCPW}>Add Food</Button>
+          )}
+        </>
       </div>
       <div>
         <Button onClick={() => navigate("/food")}>Create New Food</Button>

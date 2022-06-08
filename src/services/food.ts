@@ -20,7 +20,7 @@ export const getAllFoods = async () => {
 
 export const getFoodById = async (foodId: string) => {
   const client = getClient();
-  const { data } = await client.get("/foodbyid", foodId as any);
+  const { data } = await client.get(`/foodbyid/${foodId}`);
   return data as Food;
 };
 
