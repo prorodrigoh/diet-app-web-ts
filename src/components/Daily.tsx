@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Food, getAllFoods, getFoodById } from "../services/food";
 import { GlobalVarContext } from "../App";
+import { Food, getAllFoods, getFoodById } from "../services/food";
 import { createCPW } from "../services/cpw";
 
 // Phase 1
@@ -25,13 +25,14 @@ import { createCPW } from "../services/cpw";
 // On click Set Goal Button, the user will be redirected to the Set Goal Page (Goal.js)
 // On click Chart Button, the user will be redirected to the Chart Page (Chart.js)
 
-export const Home: FC = () => {
+export const Daily: FC = () => {
   const { loggedUser } = useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [foodWeight, setFoodWeight] = useState(0);
   const [foodId, setFoodId] = useState("");
   const [foods, setFoods] = useState<Food[]>([]);
   let foodCalories = 0;
+
   useEffect(() => {
     getAllFoods().then(setFoods);
   }, [foods]);
@@ -49,30 +50,20 @@ export const Home: FC = () => {
     foodCalories = (foodWeight * data.isoCalories) / data.isoWeight;
   };
 
-  const handleCreateCPW = async () => {
-    await calculateCPW();
+  const handleCreateCPW = () => {
+    calculateCPW();
     const createdAt = Date.now();
-    await createCPW({
+    createCPW({
       createdAt,
       foodId,
       foodWeight,
       foodCalories,
     });
+    navigate("/dashboard");
   };
 
   return (
     <>
-      <div>
-        <p>Dashboard</p>
-        <p>Days until next weight in</p>
-        {/* Will show here variable daysLeft coming from GOAL. Set when create new goal and decreased by one every day.  */}
-        <p>Current Weight</p>
-        {/* Will show here a currentWeight coming from GOAL  */}
-        <p>Daily Calories Goal</p>
-        {/* Will show here a dailyCalories coming from GOAL */}
-        <p>Calories left for today</p>
-        {/* Will show here a local variable caloriesLeft that will be equal to dailyCalories coming from GOAL but will be subtracted from variable foodCalories. When local time changes to next day,caloriesLeft resets to dailyCalories */}
-      </div>
       <div>
         <FormControl>
           <FormLabel id="radio-buttons-group-label">
@@ -113,9 +104,8 @@ export const Home: FC = () => {
         </>
       </div>
       <div>
+        <p>If your food is not on the list:</p>
         <Button onClick={() => navigate("/food")}>Create New Food</Button>
-        <Button onClick={() => navigate("/goal")}>Set Goal</Button>
-        <Button onClick={() => navigate("/chart")}>Charts</Button>
       </div>
     </>
   );

@@ -37,11 +37,11 @@ export const NewFood: FC = () => {
   const [isoCalories, setIsoCalories] = useState(0);
   const [isoUnit, setIsoUnit] = useState("g");
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const createdAt = Date.now();
     const userId = loggedUser as any;
-    await createFood({
+    createFood({
       createdAt,
       userId,
       foodName,
@@ -49,7 +49,7 @@ export const NewFood: FC = () => {
       isoCalories,
       isoUnit,
     });
-    navigate("/home");
+    navigate("/daily");
   };
 
   return (
@@ -74,7 +74,10 @@ export const NewFood: FC = () => {
           onChange={(e) => setIsoCalories(e.target.value as any)}
         />
       </div>
-      <Button type="submit">Create Food</Button>
+      <p>
+        If your food is not listed for calculations
+        <Button type="submit">Create Food</Button>
+      </p>
     </form>
   );
 };

@@ -5,10 +5,11 @@ import { Route, Routes } from "react-router-dom";
 import { Signup } from "./components/Signup";
 import { NewFood } from "./components/Food";
 import { Landing } from "./components/Landing";
-import { Home } from "./components/Home";
+import { Daily } from "./components/Daily";
 import { Chart } from "./components/Chart";
 import { Goal } from "./components/Goal";
 import { Login } from "./components/Login";
+import { Dashboard } from "./components/Dashboard";
 
 const theme = createTheme({
   typography: {
@@ -16,9 +17,10 @@ const theme = createTheme({
     fontWeightRegular: 600,
   },
   palette: {
-    mode: "dark",
+    mode: "light",
     background: {
-      default: "#03053D",
+      // default: "#03053D",
+      default: "#a5d6e3",
       paper: "#1b3d54",
     },
     primary: {
@@ -64,12 +66,22 @@ export const App: FC = () => {
         <CssBaseline />
         <Routes>
           <Route path="/" element={<Landing />} />
-          <Route path="/login" element={!loggedUser ? <Login /> : <Home />} />
-          <Route path="/signup" element={!loggedUser ? <Signup /> : <Home />} />
+          <Route
+            path="/login"
+            element={!loggedUser ? <Login /> : <Dashboard />}
+          />
+          <Route
+            path="/signup"
+            element={!loggedUser ? <Signup /> : <Dashboard />}
+          />
+          <Route
+            path="/dashboard"
+            element={!loggedUser ? <Login /> : <Dashboard />}
+          />
           <Route path="/goal" element={!loggedUser ? <Login /> : <Goal />} />
           <Route path="/food" element={!loggedUser ? <Login /> : <NewFood />} />
           <Route path="/chart" element={!loggedUser ? <Login /> : <Chart />} />
-          <Route path="/home" element={!loggedUser ? <Login /> : <Home />} />
+          <Route path="/daily" element={!loggedUser ? <Login /> : <Daily />} />
         </Routes>
       </ThemeProvider>
     </GlobalVarContext.Provider>

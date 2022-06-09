@@ -7,29 +7,29 @@
 import { useState, useContext, FC, FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
-import {
-  getAuth,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithPopup,
-} from "@firebase/auth";
-import { initializeApp } from "@firebase/app";
+// import {
+//   getAuth,
+//   signInWithEmailAndPassword,
+//   GoogleAuthProvider,
+//   signInWithPopup,
+// } from "@firebase/auth";
+// import { initializeApp } from "@firebase/app";
 import { Button, Input } from "@mui/material";
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBDNy_hyDSaDW0TqK_JWvBIsdbLAh3mf-o",
-  authDomain: "my-first-firestore-rh.firebaseapp.com",
-  projectId: "my-first-firestore-rh",
-  storageBucket: "my-first-firestore-rh.appspot.com",
-  messagingSenderId: "1085784748225",
-  appId: "1:1085784748225:web:d61f9a9bdd2bb35b092440",
-};
+// // Firebase configuration
+// const firebaseConfig = {
+//   apiKey: "AIzaSyBDNy_hyDSaDW0TqK_JWvBIsdbLAh3mf-o",
+//   authDomain: "my-first-firestore-rh.firebaseapp.com",
+//   projectId: "my-first-firestore-rh",
+//   storageBucket: "my-first-firestore-rh.appspot.com",
+//   messagingSenderId: "1085784748225",
+//   appId: "1:1085784748225:web:d61f9a9bdd2bb35b092440",
+// };
 
-const connectAuth = () => {
-  const app = initializeApp(firebaseConfig); // Initialize Firebase
-  return getAuth(app); // Connect to Firebase/Authentication
-};
+// const connectAuth = () => {
+//   const app = initializeApp(firebaseConfig); // Initialize Firebase
+//   return getAuth(app); // Connect to Firebase/Authentication
+// };
 
 export const Login: FC = () => {
   const { setLoggedUser } = useContext(GlobalVarContext);
@@ -44,16 +44,16 @@ export const Login: FC = () => {
     //   .then(() => navigate("/home"))
     //   .catch(console.error);
     setLoggedUser("629d5a6e28443a8630297536"); // for test purposes
-    navigate("/home");
+    navigate("/dashboard");
   };
 
-  const handleGoogleLogin = () => {
-    const auth = connectAuth();
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider)
-      .then((res) => setLoggedUser(res.user))
-      .catch(console.error);
-  };
+  // const handleGoogleLogin = () => {
+  //   const auth = connectAuth();
+  //   const provider = new GoogleAuthProvider();
+  //   signInWithPopup(auth, provider)
+  //     .then((res) => setLoggedUser(res.user))
+  //     .catch(console.error);
+  // };
 
   return (
     <section style={{ padding: "2em" }}>
@@ -73,7 +73,7 @@ export const Login: FC = () => {
         />
 
         <Button type="submit">Login</Button>
-        <Button onClick={handleGoogleLogin}>Google Login</Button>
+        {/* <Button onClick={handleGoogleLogin}>Google Login</Button> */}
       </form>
     </section>
   );

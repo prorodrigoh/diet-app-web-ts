@@ -1,20 +1,24 @@
+import { Goal } from "../components/Goal";
 import { getClient } from "./client";
 
 export interface Goal {
   _id?: string;
   createdAt: number;
   userId: string;
-  height: number;
-  daysOfTraining: 1 | 2 | 3 | 4 | 5;
-  iniWeight: number;
-  iniCalories: number;
-  actualWeight: number;
-  actualCalories: number;
-  dailyCalories: number;
-  daysToWeighIn: number;
+  trainingFactor: number;
+  previousWeight: number;
+  previousCalories: number;
+  currentWeight: number;
+  currentCalories: number;
 }
 
-export const createGoal = async (goal: Goal) => {
+export const createGoal = (goal: Goal) => {
   const client = getClient();
-  await client.post("/creategoal", goal);
+  client.post("/creategoal", goal);
+};
+
+export const getCurrentGoalByUser = async (userId: string) => {
+  const client = getClient();
+  const { data } = await client.get(`/goalbyuser/${userId}`);
+  return data as Goal;
 };

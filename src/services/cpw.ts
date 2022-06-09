@@ -15,8 +15,7 @@ export const getAllCPW = async () => {
   return data as CPW[];
 };
 
-export const createCPW = async (cpw: CPW) => {
-  console.log(cpw);
+export const createCPW = (cpw: CPW) => {
   const client = getClient();
-  await client.post("/createcpw", cpw);
+  client.post("/createcpw", cpw);
 };

@@ -12,31 +12,25 @@ import { createUser } from "../services/user";
 export const Signup: FC = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [dobM, setDobM] = useState<
-    1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12
-  >(1);
-  const [dobY, setDobY] = useState(2000);
   const [email, setEmail] = useState("");
+  let ageGroup: number;
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
     const createdAt = Date.now();
-    await createUser({
+    createUser({
       createdAt,
       firstName,
       lastName,
-      dobM,
-      dobY,
       email,
+      ageGroup,
     });
-    await clearForm();
+    clearForm();
   };
 
-  const clearForm = async () => {
+  const clearForm = () => {
     setFirstName("");
     setLastName("");
-    setDobM(1);
-    setDobY(2000);
     setEmail("");
   };
 
@@ -53,38 +47,19 @@ export const Signup: FC = () => {
           onChange={(e) => setLastName(e.target.value)}
           placeholder="Last Name"
         />
-      </div>
-      <div>
-        <p>DOB Month</p>
-        <Select value={dobM} onChange={(e) => setDobM(e.target.value as any)}>
-          <MenuItem value="">Month</MenuItem>
-          <MenuItem value={1}>{1}</MenuItem>
-          <MenuItem value={2}>{2}</MenuItem>
-          <MenuItem value={3}>{3}</MenuItem>
-          <MenuItem value={4}>{4}</MenuItem>
-          <MenuItem value={5}>{5}</MenuItem>
-          <MenuItem value={6}>{6}</MenuItem>
-          <MenuItem value={7}>{7}</MenuItem>
-          <MenuItem value={8}>{8}</MenuItem>
-          <MenuItem value={9}>{9}</MenuItem>
-          <MenuItem value={10}>{10}</MenuItem>
-          <MenuItem value={11}>{11}</MenuItem>
-          <MenuItem value={12}>{12}</MenuItem>
-        </Select>
-        <p>DOB Year</p>
-        <Input
-          value={dobY}
-          onChange={(e) => setDobY(e.target.value as any)}
-          placeholder="Year"
-        />
-      </div>
-      <div>
         <Input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="email"
         />
       </div>
+      <Select onChange={(e) => (ageGroup = e.target.value as any)}>
+        <MenuItem value="">Age Group</MenuItem>
+        <MenuItem value={1}>10 to 18</MenuItem>
+        <MenuItem value={2}>19 to 30</MenuItem>
+        <MenuItem value={3}>31 to 60</MenuItem>
+        <MenuItem value={4}>60+</MenuItem>
+      </Select>
       <Button type="submit">Create User</Button>
     </form>
   );
