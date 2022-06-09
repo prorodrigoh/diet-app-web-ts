@@ -10,7 +10,7 @@ import {
 import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
-import { Food, getAllFoods, getFoodById } from "../services/food";
+import { Food, getAllFoodsByUser, getFoodById } from "../services/food";
 import { createCPW } from "../services/cpw";
 
 // Phase 1
@@ -33,8 +33,12 @@ export const Daily: FC = () => {
   const [foods, setFoods] = useState<Food[]>([]);
   let foodCalories = 0;
 
+  if (!loggedUser) {
+    navigate("/login");
+  }
+
   useEffect(() => {
-    getAllFoods().then(setFoods);
+    getAllFoodsByUser(loggedUser).then(setFoods);
   }, [foods]);
 
   const handleInputWeight = (event: ChangeEvent<HTMLInputElement>) => {

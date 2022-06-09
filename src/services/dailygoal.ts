@@ -1,4 +1,3 @@
-import { Daily } from "../components/Daily";
 import { getClient } from "./client";
 
 // every day we create one.
@@ -19,5 +18,5 @@ export const createDailyGoal = (dailyGoal: DailyGoal) => {
 export const getCurrentDailyGoalByUser = async (userId: string) => {
   const client = getClient();
   const { data } = await client.get(`/dailygoalbyuser/${userId}`);
-  return data as DailyGoal;
+  return data;
 };

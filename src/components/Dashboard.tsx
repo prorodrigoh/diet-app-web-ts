@@ -2,22 +2,46 @@ import { Button } from "@mui/material";
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
+import { DailyGoal, getCurrentDailyGoalByUser } from "../services/dailygoal";
+import { getCurrentGoalByUser, Goal } from "../services/goal";
 
 export const Dashboard: FC = () => {
   const { loggedUser } = useContext(GlobalVarContext);
   let navigate = useNavigate();
+
+  // const [weekGoal, setWeekGoal] = useState();
+  // const [dailyGoal, setDailyGoal] = useState();
+
+  if (!loggedUser) {
+    navigate("/login");
+  }
+  // useEffect(() => {
+  //   console.log("Dashboard.tsx - dailyGoal", dailyGoal);
+  // }, []);
+  // useEffect(() => {
+  //   console.log("Dashboard.tsx - weekGoal", weekGoal);
+  // }, []);
+
+  // useEffect(() => {
+  //   getCurrentGoalByUser(loggedUser).then((data) => setWeekGoal(data));
+  // }, []);
+
+  // useEffect(() => {
+  //   getCurrentDailyGoalByUser(loggedUser).then((data) => setDailyGoal(data));
+  // }, []);
+
   return (
     <>
       <div>
         <p>Welcome to your Dashboard</p>
-        <p>Days until next weight in</p>
-        {/* Will show here variable daysLeft coming from GOAL. Set when create new goal and decreased by one every day.  */}
         <p>Current Weight</p>
-        {/* Will show here a currentWeight coming from GOAL  */}
+        {/* {weekGoal.currentWeight} */}
         <p>Daily Calories Goal</p>
-        {/* Will show here a dailyCalories coming from GOAL */}
+        {/* {weekGoal.currentCalories} */}
+        <p>Days until next weight in</p>
+        {/* {dailyGoal.daysToWeightIn} */}
         <p>Calories left for today</p>
-        {/* Will show here a local variable caloriesLeft that will be equal to dailyCalories coming from GOAL but will be subtracted from variable foodCalories. When local time changes to next day,caloriesLeft resets to dailyCalories */}
+        {/* {dailyGoal?.dailyCalories} */}
       </div>
       <div>
         <p>
@@ -28,10 +52,10 @@ export const Dashboard: FC = () => {
           Set your goals for the week accordingly to your current weight
           <Button onClick={() => navigate("/goal")}>Set Goal</Button>
         </p>
-        <p>
+        {/* <p>
           Check your charts to see your progress across time
           <Button onClick={() => navigate("/chart")}>Charts</Button>
-        </p>
+        </p> */}
       </div>
     </>
   );

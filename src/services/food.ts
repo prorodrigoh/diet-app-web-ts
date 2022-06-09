@@ -30,6 +30,6 @@ export const getFoodById = async (foodId: string) => {
 
 export const getAllFoodsByUser = async (loggedUser: string) => {
   const client = getClient();
-  const { data } = await client.get("/allfoodsbyuser", loggedUser as any);
+  const { data } = await client.get(`/allfoodsbyuser/${loggedUser}`);
   return data as Food[];
 };

@@ -43,7 +43,7 @@ export const Login: FC = () => {
     //   .then((res) => setLoggedUser(res.user))
     //   .then(() => navigate("/home"))
     //   .catch(console.error);
-    setLoggedUser("629d5a6e28443a8630297536"); // for test purposes
+    setLoggedUser("62a1ef185fcd8f68e8b3c312"); // for test purposes
     navigate("/dashboard");
   };
 

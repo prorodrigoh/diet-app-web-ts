@@ -8,7 +8,7 @@ import {
   Radio,
   Select,
 } from "@mui/material";
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { GlobalVarContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { createGoal, getCurrentGoalByUser } from "../services/goal";
@@ -32,65 +32,66 @@ export const Goal: FC = () => {
     navigate("/login");
   }
 
-  let goalId: string,
-    previousWeight: number,
-    previousCalories: number,
-    currentCalories: number,
-    dailyCalories: number,
-    daysToWeightIn: number;
+  const [goalId, setGoalId] = useState("");
+  const [previousWeight, setPreviousWeight] = useState(0);
+  const [previousCalories, setPreviousCalories] = useState(0);
+  const [currentCalories, setCurrentCalories] = useState(0);
+  const [dailyCalories, setDailyCalories] = useState(0);
+  const [daysToWeightIn, setDaysToWeightIn] = useState(0);
+  const [currentWeight, setCurrentWeight] = useState(0);
+  const [selectedGender, setSelectedGender] = useState("m");
+  const [trainingFactor, setTrainingFactor] = useState(0);
 
   const calculateGoals = async () => {
     const data = await getCurrentGoalByUser(loggedUser);
-    goalId = data._id as any;
+    setGoalId(data[0]._id);
     const datauser = await getUserById(loggedUser);
 
     if (selectedGender === "m") {
       switch (datauser.ageGroup) {
         case 1:
-          currentCalories = currentWeight * trainingFactor * 17.5 + 651;
+          setCurrentCalories(currentWeight * trainingFactor * 17.5 + 651);
           break;
         case 2:
-          currentCalories = currentWeight * trainingFactor * 15.3 + 679;
+          setCurrentCalories(currentWeight * trainingFactor * 15.3 + 679);
           break;
         case 3:
-          currentCalories = currentWeight * trainingFactor * 8.7 + 879;
+          setCurrentCalories(currentWeight * trainingFactor * 8.7 + 879);
           break;
         case 4:
-          currentCalories = currentWeight * trainingFactor * 13.5 + 487;
+          setCurrentCalories(currentWeight * trainingFactor * 13.5 + 487);
           break;
         default:
-          currentCalories = -9999;
+          setCurrentCalories(-9999);
           break;
       }
     } else {
       switch (datauser.ageGroup) {
         case 1:
-          currentCalories = currentWeight * trainingFactor * 12.2 + 746;
+          setCurrentCalories(currentWeight * trainingFactor * 12.2 + 746);
           break;
         case 2:
-          currentCalories = currentWeight * trainingFactor * 14.7 + 496;
+          setCurrentCalories(currentWeight * trainingFactor * 14.7 + 496);
           break;
         case 3:
-          currentCalories = currentWeight * trainingFactor * 8.7 + 829;
+          setCurrentCalories(currentWeight * trainingFactor * 8.7 + 829);
           break;
         case 4:
-          currentCalories = currentWeight * trainingFactor * 10.5 + 596;
+          setCurrentCalories(currentWeight * trainingFactor * 10.5 + 596);
           break;
         default:
-          currentCalories = -9999;
+          setCurrentCalories(-9999);
           break;
       }
     }
-    previousWeight = data.currentWeight;
-    previousCalories = data.currentCalories;
-    dailyCalories = currentCalories; // will subtract from dailyCalories
-    daysToWeightIn = 7;
+    setPreviousWeight(data.currentWeight);
+    setPreviousCalories(data.currentCalories);
   };
 
   const handleGoals = () => {
     const createdAt = Date.now();
-    calculateGoals();
     const userId = loggedUser as any;
+    calculateGoals();
     createGoal({
       createdAt,
       userId,
@@ -101,34 +102,16 @@ export const Goal: FC = () => {
       currentCalories,
     });
 
+    setDailyCalories(currentCalories); // will subtract from dailyCalories
+    setDaysToWeightIn(7);
     createDailyGoal({
       createdAt,
       goalId,
       dailyCalories,
       daysToWeightIn,
     });
-    // console.log("createGoal", {
-    //   createdAt,
-    //   userId,
-    //   trainingFactor,
-    //   previousWeight,
-    //   previousCalories,
-    //   currentWeight,
-    //   currentCalories,
-    // });
-
-    // console.log("createDailyGoal", {
-    //   createdAt,
-    //   goalId,
-    //   dailyCalories,
-    //   daysToWeightIn,
-    // });
-    navigate("/dashboard");
+    // navigate("/dashboard");
   };
-
-  const [currentWeight, setCurrentWeight] = useState(0);
-  const [selectedGender, setSelectedGender] = useState("m");
-  const [trainingFactor, setTrainingFactor] = useState(0);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSelectedGender(event.target.value);

@@ -19,6 +19,6 @@ export const createGoal = (goal: Goal) => {
 
 export const getCurrentGoalByUser = async (userId: string) => {
   const client = getClient();
-  const { data } = await client.get(`/goalbyuser/${userId}`);
-  return data as Goal;
+  const { data } = await client.get(`/currentweekgoalbyuser/${userId}`);
+  return data;
 };
