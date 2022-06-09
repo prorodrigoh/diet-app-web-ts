@@ -43,8 +43,6 @@ export const Goal: FC = () => {
   const [trainingFactor, setTrainingFactor] = useState(0);
 
   const calculateGoals = async () => {
-    const data = await getCurrentGoalByUser(loggedUser);
-    setGoalId(data[0]._id);
     const datauser = await getUserById(loggedUser);
 
     if (selectedGender === "m") {
@@ -84,15 +82,28 @@ export const Goal: FC = () => {
           break;
       }
     }
-    setPreviousWeight(data.currentWeight);
-    setPreviousCalories(data.currentCalories);
   };
 
-  const handleGoals = () => {
+  const handleGoals = async () => {
     const createdAt = Date.now();
     const userId = loggedUser as any;
+    const data = await getCurrentGoalByUser(loggedUser);
+    setGoalId(data[0]._id);
+    setPreviousWeight(data[0].currentWeight);
+    setPreviousCalories(data[0].currentCalories);
+
     calculateGoals();
-    createGoal({
+
+    // createGoal({
+    //   createdAt,
+    //   userId,
+    //   trainingFactor,
+    //   previousWeight,
+    //   previousCalories,
+    //   currentWeight,
+    //   currentCalories,
+    // });
+    console.log("createGoal", {
       createdAt,
       userId,
       trainingFactor,
@@ -104,7 +115,14 @@ export const Goal: FC = () => {
 
     setDailyCalories(currentCalories); // will subtract from dailyCalories
     setDaysToWeightIn(7);
-    createDailyGoal({
+
+    // createDailyGoal({
+    //   createdAt,
+    //   goalId,
+    //   dailyCalories,
+    //   daysToWeightIn,
+    // });
+    console.log("createDailyGoal", {
       createdAt,
       goalId,
       dailyCalories,
