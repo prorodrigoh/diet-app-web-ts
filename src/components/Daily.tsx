@@ -39,7 +39,7 @@ export const Daily: FC = () => {
 
   useEffect(() => {
     getAllFoodsByUser(loggedUser).then(setFoods);
-  }, [foods]);
+  }, []);
 
   const handleInputWeight = (event: ChangeEvent<HTMLInputElement>) => {
     setFoodWeight((event.target as HTMLInputElement).value as any);

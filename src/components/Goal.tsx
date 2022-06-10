@@ -8,7 +8,7 @@ import {
   Radio,
   Select,
 } from "@mui/material";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { GlobalVarContext } from "../App";
 import { useNavigate } from "react-router-dom";
 import { createGoal, getCurrentGoalByUser } from "../services/goal";
@@ -31,79 +31,74 @@ export const Goal: FC = () => {
   if (!loggedUser) {
     navigate("/login");
   }
-
-  const [goalId, setGoalId] = useState("");
-  const [previousWeight, setPreviousWeight] = useState(0);
-  const [previousCalories, setPreviousCalories] = useState(0);
-  const [currentCalories, setCurrentCalories] = useState(0);
-  const [dailyCalories, setDailyCalories] = useState(0);
-  const [daysToWeightIn, setDaysToWeightIn] = useState(0);
-  const [currentWeight, setCurrentWeight] = useState(0);
   const [selectedGender, setSelectedGender] = useState("m");
-  const [trainingFactor, setTrainingFactor] = useState(0);
+
+  let trainingFactor: number = -1,
+    previousWeight: number = -1,
+    previousCalories: number = -1,
+    currentWeight: number = -1,
+    currentCalories: number = -1,
+    goalId: string,
+    dailyCalories: number = -1,
+    daysToWeightIn: number = 7;
 
   const calculateGoals = async () => {
+    let calculation = -1;
     const datauser = await getUserById(loggedUser);
 
     if (selectedGender === "m") {
       switch (datauser.ageGroup) {
         case 1:
-          setCurrentCalories(currentWeight * trainingFactor * 17.5 + 651);
+          calculation = currentWeight * trainingFactor * 17.5 + 651;
           break;
         case 2:
-          setCurrentCalories(currentWeight * trainingFactor * 15.3 + 679);
+          calculation = currentWeight * trainingFactor * 15.3 + 679;
           break;
         case 3:
-          setCurrentCalories(currentWeight * trainingFactor * 8.7 + 879);
+          calculation = currentWeight * trainingFactor * 8.7 + 879;
           break;
         case 4:
-          setCurrentCalories(currentWeight * trainingFactor * 13.5 + 487);
+          calculation = currentWeight * trainingFactor * 13.5 + 487;
           break;
         default:
-          setCurrentCalories(-9999);
+          calculation = -9999;
           break;
       }
     } else {
       switch (datauser.ageGroup) {
         case 1:
-          setCurrentCalories(currentWeight * trainingFactor * 12.2 + 746);
+          calculation = currentWeight * trainingFactor * 12.2 + 746;
           break;
         case 2:
-          setCurrentCalories(currentWeight * trainingFactor * 14.7 + 496);
+          calculation = currentWeight * trainingFactor * 14.7 + 496;
           break;
         case 3:
-          setCurrentCalories(currentWeight * trainingFactor * 8.7 + 829);
+          calculation = currentWeight * trainingFactor * 8.7 + 829;
           break;
         case 4:
-          setCurrentCalories(currentWeight * trainingFactor * 10.5 + 596);
+          calculation = currentWeight * trainingFactor * 10.5 + 596;
           break;
         default:
-          setCurrentCalories(-9999);
+          calculation = -9999;
           break;
       }
     }
+    return calculation as number;
   };
 
   const handleGoals = async () => {
     const createdAt = Date.now();
     const userId = loggedUser as any;
     const data = await getCurrentGoalByUser(loggedUser);
-    setGoalId(data[0]._id);
-    setPreviousWeight(data[0].currentWeight);
-    setPreviousCalories(data[0].currentCalories);
+    goalId = data[0]._id;
+    previousWeight = data[0].currentWeight;
+    previousCalories = data[0].currentCalories;
 
-    calculateGoals();
+    const result = await calculateGoals();
+    currentCalories = Math.floor(result);
+    dailyCalories = currentCalories;
 
-    // createGoal({
-    //   createdAt,
-    //   userId,
-    //   trainingFactor,
-    //   previousWeight,
-    //   previousCalories,
-    //   currentWeight,
-    //   currentCalories,
-    // });
-    console.log("createGoal", {
+    createGoal({
       createdAt,
       userId,
       trainingFactor,
@@ -113,22 +108,14 @@ export const Goal: FC = () => {
       currentCalories,
     });
 
-    setDailyCalories(currentCalories); // will subtract from dailyCalories
-    setDaysToWeightIn(7);
-
-    // createDailyGoal({
-    //   createdAt,
-    //   goalId,
-    //   dailyCalories,
-    //   daysToWeightIn,
-    // });
-    console.log("createDailyGoal", {
+    createDailyGoal({
       createdAt,
       goalId,
       dailyCalories,
       daysToWeightIn,
     });
-    // navigate("/dashboard");
+
+    navigate("/dashboard");
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,7 +132,8 @@ export const Goal: FC = () => {
           <Input
             name="currentWeight"
             placeholder="Current Weight (Kg)"
-            onChange={(e) => setCurrentWeight(e.target.value as any)}
+            // onChange={(e) => setCurrentWeight(e.target.value as any)}
+            onChange={(e) => (currentWeight = e.target.value as any)}
           />
         </FormControl>
       </div>
@@ -182,8 +170,8 @@ export const Goal: FC = () => {
             <Select
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
-              value={trainingFactor}
-              onChange={(e) => setTrainingFactor(e.target.value as any)}
+              // value={trainingFactor}
+              onChange={(e) => (trainingFactor = e.target.value as any)}
             >
               <MenuItem value={1.2}>No extra activity</MenuItem>
               <MenuItem value={1.3}>Less than 3x a week</MenuItem>
@@ -201,8 +189,8 @@ export const Goal: FC = () => {
             <Select
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
-              value={trainingFactor}
-              onChange={(e) => setTrainingFactor(e.target.value as any)}
+              // value={trainingFactor}
+              onChange={(e) => (trainingFactor = e.target.value as any)}
             >
               <MenuItem value={1.2}>No extra activity</MenuItem>
               <MenuItem value={1.3}>Less than 3x a week</MenuItem>
@@ -219,7 +207,7 @@ export const Goal: FC = () => {
           <p>
             Set your Goals for the week
             {/* <Button onClick={handleGoals}>Save</Button> */}
-            {!(currentWeight && selectedGender && trainingFactor) ? (
+            {currentWeight !== -1 && selectedGender && trainingFactor !== -1 ? (
               <Button disabled>Save</Button>
             ) : (
               <Button onClick={handleGoals}>Save</Button>
