@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
 import { Food, getAllFoodsByUser, getFoodById } from "../services/food";
 import { createCPW } from "../services/cpw";
+import { getCurrentWeekGoalByUser } from "../services/goal";
+import { createDailyGoal } from "../services/dailygoal";
 
 // Phase 1
 // Page will display Current weight, Daily Calories Goal, Days until next weight-in
@@ -54,9 +56,50 @@ export const Daily: FC = () => {
     foodCalories = (foodWeight * data.isoCalories) / data.isoWeight;
   };
 
-  const handleCreateCPW = () => {
+  // every time we add a food to daily consumption
+  // we check if a daily goal is set.
+
+  const checkIfDailyGoalExists = async () => {
+    const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
+    if (!dataBefore) {
+      return false;
+    }
+    return true;
+  };
+
+  // if it is not, we create it
+
+  const createDayGoal = async () => {
+    const data = await getCurrentWeekGoalByUser(loggedUser);
+    const goalId = data[0]._id;
+
+    const dailyCalories = data[0].currentCalories - foodCalories;
+    const daysToWeightIn = 7;
+
+    createDailyGoal({
+      goalId,
+      dailyCalories,
+      daysToWeightIn,
+    });
+  };
+
+  // if a daily goal exists
+  // we subtract the food calories from it
+
+  const updateDailyGoal = async () => {
+    //
+  };
+
+  const handleCreateCPW = async () => {
     calculateCPW();
-    const createdAt = Date.now();
+    const exists = await checkIfDailyGoalExists();
+    if (exists) {
+      updateDailyGoal();
+    } else {
+      createDayGoal();
+    }
+
+    const createdAt = new Date();
     createCPW({
       createdAt,
       foodId,
@@ -74,6 +117,8 @@ export const Daily: FC = () => {
             List of foods already in the DB - Click to select, add Food Weight
             to add to the daily consumption
           </FormLabel>
+        </FormControl>
+        <FormControl>
           <RadioGroup
             aria-labelledby="radio-buttons-group-label"
             name="radio-buttons-group"
@@ -83,7 +128,7 @@ export const Daily: FC = () => {
             {foods.map((food) => {
               return (
                 <FormControlLabel
-                  key={food.createdAt}
+                  key={food._id}
                   value={food._id}
                   control={<Radio />}
                   label={food.foodName}
@@ -95,21 +140,33 @@ export const Daily: FC = () => {
       </div>
       <div>
         <>
-          <Input
-            name="foodWeight"
-            placeholder="Food Weight (g)"
-            onChange={handleInputWeight}
-          />
-          {!foodWeight ? (
-            <Button disabled>Add Food</Button>
-          ) : (
-            <Button onClick={handleCreateCPW}>Add Food</Button>
-          )}
+          <FormControl>
+            <Input
+              name="foodWeight"
+              placeholder="Food Weight (g)"
+              onChange={handleInputWeight}
+            />
+          </FormControl>
+          <FormControl>
+            {!foodWeight ? (
+              <Button disabled>Add Food</Button>
+            ) : (
+              <Button onClick={handleCreateCPW}>Add Food</Button>
+            )}
+          </FormControl>
         </>
       </div>
       <div>
-        <p>If your food is not on the list:</p>
-        <Button onClick={() => navigate("/food")}>Create New Food</Button>
+        <FormControl>
+          <p>If your food is not on the list:</p>
+          <Button onClick={() => navigate("/food")}>Create New Food</Button>
+        </FormControl>
+      </div>
+      <div>
+        <FormControl>
+          <p></p>
+          <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
+        </FormControl>
       </div>
     </>
   );
