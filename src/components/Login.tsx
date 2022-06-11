@@ -14,7 +14,7 @@ import { GlobalVarContext } from "../App";
 //   signInWithPopup,
 // } from "@firebase/auth";
 // import { initializeApp } from "@firebase/app";
-import { Button, FormControl, Input } from "@mui/material";
+import { Button, FormControl, FormHelperText, Input } from "@mui/material";
 import { getUserByEmail } from "../services/user";
 
 // // Firebase configuration
@@ -60,7 +60,7 @@ export const Login: FC = () => {
   return (
     <>
       <div>
-        <FormControl sx={{ m: 1, minWidth: 200 }}>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <Input
             value={email}
             name="email"
@@ -70,7 +70,7 @@ export const Login: FC = () => {
         </FormControl>
       </div>
       <div>
-        <FormControl sx={{ m: 1, minWidth: 200 }}>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <Input
             type="password"
             value={password}
@@ -81,15 +81,26 @@ export const Login: FC = () => {
         </FormControl>
       </div>
       <div>
-        <FormControl sx={{ m: 1, minWidth: 200 }}>
-          <Button onClick={handleLogin}>Login</Button>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Button
+            onClick={handleLogin}
+            variant="contained"
+            component="span"
+            size="large"
+            aria-describedby="my-helper-text"
+          >
+            Login
+          </Button>
+          <FormHelperText id="my-helper-text" hidden>
+            Access the application
+          </FormHelperText>
         </FormControl>
       </div>
-      <div>
-        <FormControl sx={{ m: 1, minWidth: 200 }}>
-          {/* <Button onClick={handleGoogleLogin}>Google Login</Button> */}
+      {/* <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Button onClick={handleGoogleLogin}>Google Login</Button>
         </FormControl>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -136,19 +136,16 @@ export const Goal: FC = () => {
     <>
       <div>
         <FormControl>
-          <FormLabel id="goal-form">
-            Calculate your calories weekly goal
-          </FormLabel>
+          <FormLabel>Calculate your calories weekly goal</FormLabel>
           <Input
             name="currentWeight"
             placeholder="Current Weight (Kg)"
             onChange={(e) => setCurrentWeight(e.target.value as any)}
-            //onChange={(e) => (currentWeight = e.target.value as any)}
           />
         </FormControl>
       </div>
       <div>
-        <FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <p>
             <Radio
               checked={selectedGender === "m"}
@@ -215,16 +212,34 @@ export const Goal: FC = () => {
         )}
       </div>
       <div>
-        <FormControl>
-          <p>
-            Set your Goals for the week
-            {/* <Button onClick={handleGoals}>Save</Button> */}
-            {currentWeight === -1 || trainingFactor === -1 ? (
-              <Button disabled>Save</Button>
-            ) : (
-              <Button onClick={handleGoals}>Save</Button>
-            )}
-          </p>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <FormLabel>Set your Goals for the week</FormLabel>
+
+          {/* <Button onClick={handleGoals}>Save</Button> */}
+          {currentWeight === -1 || trainingFactor === -1 ? (
+            <Button disabled>Save</Button>
+          ) : (
+            <Button
+              onClick={handleGoals}
+              variant="contained"
+              component="span"
+              size="large"
+            >
+              Save
+            </Button>
+          )}
+        </FormControl>
+      </div>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Button
+            onClick={() => navigate("/dashboard")}
+            variant="contained"
+            component="span"
+            size="large"
+          >
+            Back
+          </Button>
         </FormControl>
       </div>
     </>
