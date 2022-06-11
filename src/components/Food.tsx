@@ -18,7 +18,7 @@
 // the application will create a new food on the users DB
 // the application will save the calories consumed, the food and weight consumed to the DB
 
-import { Button, Input } from "@mui/material";
+import { Button, FormControl, FormLabel, Input } from "@mui/material";
 import { FC, FormEvent, useContext, useState } from "react";
 import { createFood } from "../services/food";
 import { GlobalVarContext } from "../App";
@@ -36,8 +36,7 @@ export const NewFood: FC = () => {
   const [isoWeight, setIsoWeight] = useState(0);
   const [isoCalories, setIsoCalories] = useState(0);
 
-  const onSubmit = (e: FormEvent) => {
-    e.preventDefault();
+  const postCreateFood = () => {
     const createdAt = new Date();
     const userId = loggedUser as any;
     const isoUnit = "g";
@@ -53,31 +52,76 @@ export const NewFood: FC = () => {
   };
 
   return (
-    <form onSubmit={(e) => onSubmit(e)}>
+    <>
       <div>
-        <Input
-          name="foodName"
-          placeholder="Food Name"
-          // value={foodName}
-          onChange={(e) => setFoodName(e.target.value)}
-        />
-        <Input
-          name="isoWeight"
-          placeholder="ISO Weight (g)"
-          // value={isoWeight}
-          onChange={(e) => setIsoWeight(e.target.value as any)}
-        />
-        <Input
-          name="isoCalories"
-          placeholder="ISO Calories"
-          // value={isoCalories}
-          onChange={(e) => setIsoCalories(e.target.value as any)}
-        />
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <FormLabel>If your food is not listed for calculations</FormLabel>
+        </FormControl>
       </div>
-      <p>
-        If your food is not listed for calculations
-        <Button type="submit">Create Food</Button>
-      </p>
-    </form>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Input
+            name="foodName"
+            placeholder="Food Name"
+            // value={foodName}
+            onChange={(e) => setFoodName(e.target.value)}
+          />
+        </FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Input
+            name="isoWeight"
+            placeholder="ISO Weight (g)"
+            // value={isoWeight}
+            onChange={(e) => setIsoWeight(e.target.value as any)}
+          />
+        </FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Input
+            name="isoCalories"
+            placeholder="ISO Calories"
+            // value={isoCalories}
+            onChange={(e) => setIsoCalories(e.target.value as any)}
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Button
+            onClick={() => navigate("/daily")}
+            variant="contained"
+            component="span"
+            size="large"
+          >
+            Back
+          </Button>
+        </FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          {!foodName || !isoWeight || !isoCalories ? (
+            <Button disabled>Create Food</Button>
+          ) : (
+            <Button
+              onClick={() => postCreateFood()}
+              variant="contained"
+              component="span"
+              size="large"
+            >
+              Create Food
+            </Button>
+          )}
+        </FormControl>
+      </div>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Button
+            onClick={() => navigate("/dashboard")}
+            variant="contained"
+            component="span"
+            size="large"
+          >
+            Dashboard
+          </Button>
+        </FormControl>
+      </div>
+    </>
   );
 };

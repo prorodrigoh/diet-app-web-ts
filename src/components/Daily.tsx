@@ -112,13 +112,18 @@ export const Daily: FC = () => {
   return (
     <>
       <div>
-        <FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <FormLabel id="radio-buttons-group-label">
-            List of foods already in the DB - Click to select, add Food Weight
-            to add to the daily consumption
+            Here's a list of foods that you've already created
+          </FormLabel>
+          <FormLabel id="radio-buttons-group-label">
+            Select one, add how much you are eating and click on add food to use
+            it
           </FormLabel>
         </FormControl>
-        <FormControl>
+      </div>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <RadioGroup
             aria-labelledby="radio-buttons-group-label"
             name="radio-buttons-group"
@@ -139,33 +144,54 @@ export const Daily: FC = () => {
         </FormControl>
       </div>
       <div>
-        <>
-          <FormControl>
-            <Input
-              name="foodWeight"
-              placeholder="Food Weight (g)"
-              onChange={handleInputWeight}
-            />
-          </FormControl>
-          <FormControl>
-            {!foodWeight ? (
-              <Button disabled>Add Food</Button>
-            ) : (
-              <Button onClick={handleCreateCPW}>Add Food</Button>
-            )}
-          </FormControl>
-        </>
-      </div>
-      <div>
-        <FormControl>
-          <p>If your food is not on the list:</p>
-          <Button onClick={() => navigate("/food")}>Create New Food</Button>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <Input
+            name="foodWeight"
+            placeholder="Food Weight (g)"
+            onChange={handleInputWeight}
+          />
         </FormControl>
       </div>
       <div>
-        <FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          {!foodWeight ? (
+            <Button disabled>Add Food</Button>
+          ) : (
+            <Button
+              onClick={handleCreateCPW}
+              variant="contained"
+              component="span"
+              size="large"
+            >
+              Add Food
+            </Button>
+          )}
+        </FormControl>
+      </div>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+          <p>If your food is not on the list:</p>
+          <Button
+            onClick={() => navigate("/food")}
+            variant="contained"
+            component="span"
+            size="large"
+          >
+            Create New Food
+          </Button>
+        </FormControl>
+      </div>
+      <div>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <p></p>
-          <Button onClick={() => navigate("/dashboard")}>Dashboard</Button>
+          <Button
+            onClick={() => navigate("/dashboard")}
+            variant="contained"
+            component="span"
+            size="large"
+          >
+            Dashboard
+          </Button>
         </FormControl>
       </div>
     </>
