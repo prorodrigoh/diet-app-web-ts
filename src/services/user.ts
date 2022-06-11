@@ -1,7 +1,8 @@
 import { getClient } from "./client";
 
 export interface User {
-  createdAt: number;
+  _id?: String;
+  createdAt?: Date;
   firstName: string;
   lastName: string;
   email: string;
@@ -12,7 +13,8 @@ export interface User {
 
 export const createUser = (user: User) => {
   const client = getClient();
-  client.post("/createuser", user);
+  const id = client.post("/signup", user);
+  return id;
 };
 
 export const getUserById = async (userId: string) => {
@@ -23,6 +25,6 @@ export const getUserById = async (userId: string) => {
 
 export const getUserByEmail = async (email: string) => {
   const client = getClient();
-  const { data } = await client.get(email);
+  const { data } = await client.get(`/login/${email}`);
   return data as User;
 };

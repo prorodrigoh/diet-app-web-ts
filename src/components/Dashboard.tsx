@@ -1,5 +1,5 @@
 import { Button } from "@mui/material";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
 import { ListFoods } from "./ListFoods";
@@ -16,7 +16,7 @@ export const Dashboard: FC = () => {
   return (
     <>
       <ListStats />
-      <ListFoods />
+      {/* <ListFoods /> */}
       <div>
         <p>
           Add a food that you have eaten to calculate your numbers for the day

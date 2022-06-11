@@ -1,7 +1,8 @@
 import { getClient } from "./client";
 
 export interface CPW {
-  createdAt: number;
+  _id?: string;
+  createdAt?: Date;
   foodWeight: number;
   foodCalories: number;
   foodId: string;

@@ -35,12 +35,12 @@ export const NewFood: FC = () => {
   const [foodName, setFoodName] = useState("");
   const [isoWeight, setIsoWeight] = useState(0);
   const [isoCalories, setIsoCalories] = useState(0);
-  const [isoUnit, setIsoUnit] = useState("g");
 
   const onSubmit = (e: FormEvent) => {
     e.preventDefault();
-    const createdAt = Date.now();
+    const createdAt = new Date();
     const userId = loggedUser as any;
+    const isoUnit = "g";
     createFood({
       createdAt,
       userId,

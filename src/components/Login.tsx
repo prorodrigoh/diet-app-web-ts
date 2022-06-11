@@ -4,7 +4,7 @@
 // On click the Login button, if user exists, it will redirect to Home page
 // If user doesn't exists, error message will show email/password incorrect
 
-import { useState, useContext, FC, FormEvent } from "react";
+import { useState, useContext, FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
 // import {
@@ -14,7 +14,8 @@ import { GlobalVarContext } from "../App";
 //   signInWithPopup,
 // } from "@firebase/auth";
 // import { initializeApp } from "@firebase/app";
-import { Button, Input } from "@mui/material";
+import { Button, FormControl, Input } from "@mui/material";
+import { getUserByEmail } from "../services/user";
 
 // // Firebase configuration
 // const firebaseConfig = {
@@ -33,17 +34,18 @@ import { Button, Input } from "@mui/material";
 
 export const Login: FC = () => {
   const { setLoggedUser } = useContext(GlobalVarContext);
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   let navigate = useNavigate();
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     // const auth = connectAuth();
     // signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
     //   .then((res) => setLoggedUser(res.user))
     //   .then(() => navigate("/home"))
     //   .catch(console.error);
-    setLoggedUser("62a1ef185fcd8f68e8b3c312"); // for test purposes
+    const { _id } = await getUserByEmail(email);
+    setLoggedUser(_id);
     navigate("/dashboard");
   };
 
@@ -56,25 +58,38 @@ export const Login: FC = () => {
   // };
 
   return (
-    <section style={{ padding: "2em" }}>
-      <form onSubmit={handleLogin}>
-        <Input
-          //value={email}
-          name="email"
-          //onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-        />
-        <Input
-          type="password"
-          //value={password}
-          name="password"
-          //onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-        />
-
-        <Button type="submit">Login</Button>
-        {/* <Button onClick={handleGoogleLogin}>Google Login</Button> */}
-      </form>
-    </section>
+    <>
+      <div>
+        <FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Input
+            value={email}
+            name="email"
+            onChange={(e) => setEmail(e.target.value as any)}
+            placeholder="Email"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Input
+            type="password"
+            value={password}
+            name="password"
+            onChange={(e) => setPassword(e.target.value as any)}
+            placeholder="Password"
+          />
+        </FormControl>
+      </div>
+      <div>
+        <FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Button onClick={handleLogin}>Login</Button>
+        </FormControl>
+      </div>
+      <div>
+        <FormControl sx={{ m: 1, minWidth: 200 }}>
+          {/* <Button onClick={handleGoogleLogin}>Google Login</Button> */}
+        </FormControl>
+      </div>
+    </>
   );
 };

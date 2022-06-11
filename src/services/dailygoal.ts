@@ -4,7 +4,7 @@ import { getClient } from "./client";
 // every Goal will have 7 of these
 export interface DailyGoal {
   _id?: string;
-  createdAt: number;
+  createdAt?: Date;
   goalId: string;
   dailyCalories: number; // update every time user add food from the Food page
   daysToWeightIn: number; // set initially at 7. The last one to be created will set it to 1

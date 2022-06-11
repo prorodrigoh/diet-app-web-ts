@@ -2,7 +2,7 @@ import { getClient } from "./client";
 
 export interface Food {
   _id?: string;
-  createdAt: number;
+  createdAt?: Date;
   userId: string;
   foodName: string;
   isoWeight: number;
