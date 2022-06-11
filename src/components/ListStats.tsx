@@ -40,7 +40,7 @@ export const ListStats: FC = () => {
       </div>
       <div>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <FormLabel>Your Current Weight</FormLabel>
+          <FormLabel>This week's starting Weight</FormLabel>
           <FormLabel>{displayCurrentWeight} Kg</FormLabel>
         </FormControl>
       </div>
