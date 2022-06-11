@@ -11,9 +11,8 @@ import {
 import { FC, useContext, useState } from "react";
 import { GlobalVarContext } from "../App";
 import { useNavigate } from "react-router-dom";
-import { createGoal, getCurrentGoalByUser } from "../services/goal";
+import { createGoal, getCurrentWeekGoalByUser } from "../services/goal";
 import { getUserById } from "../services/user";
-import { createDailyGoal } from "../services/dailygoal";
 
 // Phase 1 - a
 // Get last Body weight and calories goal from DB and populate the fields Previous weight/calories
@@ -32,15 +31,12 @@ export const Goal: FC = () => {
     navigate("/login");
   }
   const [selectedGender, setSelectedGender] = useState("m");
+  const [currentWeight, setCurrentWeight] = useState(-1);
+  const [trainingFactor, setTrainingFactor] = useState(-1);
 
-  let trainingFactor: number = -1,
-    previousWeight: number = -1,
+  let previousWeight: number = -1,
     previousCalories: number = -1,
-    currentWeight: number = -1,
-    currentCalories: number = -1,
-    goalId: string,
-    dailyCalories: number = -1,
-    daysToWeightIn: number = 7;
+    currentCalories: number = -1;
 
   const calculateGoals = async () => {
     let calculation = -1;
@@ -86,20 +82,8 @@ export const Goal: FC = () => {
     return calculation as number;
   };
 
-  const handleGoals = async () => {
-    const createdAt = Date.now();
-    const userId = loggedUser as any;
-    const data = await getCurrentGoalByUser(loggedUser);
-    goalId = data[0]._id;
-    previousWeight = data[0].currentWeight;
-    previousCalories = data[0].currentCalories;
-
-    const result = await calculateGoals();
-    currentCalories = Math.floor(result);
-    dailyCalories = currentCalories;
-
-    createGoal({
-      createdAt,
+  const createWeekGoal = async (userId: string) => {
+    const id = createGoal({
       userId,
       trainingFactor,
       previousWeight,
@@ -107,13 +91,39 @@ export const Goal: FC = () => {
       currentWeight,
       currentCalories,
     });
+    return id;
+  };
+  const checkIfWeekGoalExists = async () => {
+    const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
+    // check if collection is empty
+    if (dataBefore.length === 0) {
+      return false;
+    }
+    previousWeight = dataBefore[0].currentWeight;
+    previousCalories = dataBefore[0].currentCalories;
+    return true;
+  };
 
-    createDailyGoal({
-      createdAt,
-      goalId,
-      dailyCalories,
-      daysToWeightIn,
-    });
+  // const updatePreviousWeightandCalories = async () => {
+  //   const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
+  //   previousWeight = dataBefore[0].currentWeight;
+  //   previousCalories = dataBefore[0].currentCalories;
+  //   console.log("upd", previousWeight, previousCalories);
+  // };
+
+  const handleGoals = async () => {
+    // const createdAt = new Date();
+    const userId = loggedUser as any;
+    const result = await calculateGoals();
+    currentCalories = Math.floor(result);
+
+    const exists = await checkIfWeekGoalExists();
+    // a way to block execution before previous await
+    if (exists) {
+      createWeekGoal(userId);
+    } else {
+      createWeekGoal(userId);
+    }
 
     navigate("/dashboard");
   };
@@ -127,13 +137,13 @@ export const Goal: FC = () => {
       <div>
         <FormControl>
           <FormLabel id="goal-form">
-            Calculate your calories intake daily goal
+            Calculate your calories weekly goal
           </FormLabel>
           <Input
             name="currentWeight"
             placeholder="Current Weight (Kg)"
-            // onChange={(e) => setCurrentWeight(e.target.value as any)}
-            onChange={(e) => (currentWeight = e.target.value as any)}
+            onChange={(e) => setCurrentWeight(e.target.value as any)}
+            //onChange={(e) => (currentWeight = e.target.value as any)}
           />
         </FormControl>
       </div>
@@ -170,9 +180,10 @@ export const Goal: FC = () => {
             <Select
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
-              // value={trainingFactor}
-              onChange={(e) => (trainingFactor = e.target.value as any)}
+              value={trainingFactor}
+              onChange={(e) => setTrainingFactor(e.target.value as any)}
             >
+              <MenuItem value={-1}>Select an option</MenuItem>
               <MenuItem value={1.2}>No extra activity</MenuItem>
               <MenuItem value={1.3}>Less than 3x a week</MenuItem>
               <MenuItem value={1.35}>3x per week at least 30 minutes</MenuItem>
@@ -189,9 +200,10 @@ export const Goal: FC = () => {
             <Select
               labelId="demo-simple-select-filled-label"
               id="demo-simple-select-filled"
-              // value={trainingFactor}
-              onChange={(e) => (trainingFactor = e.target.value as any)}
+              value={trainingFactor}
+              onChange={(e) => setTrainingFactor(e.target.value as any)}
             >
+              <MenuItem value={-1}>Select an option</MenuItem>
               <MenuItem value={1.2}>No extra activity</MenuItem>
               <MenuItem value={1.3}>Less than 3x a week</MenuItem>
               <MenuItem value={1.4}>3x per week at least 30 minutes</MenuItem>
@@ -207,7 +219,7 @@ export const Goal: FC = () => {
           <p>
             Set your Goals for the week
             {/* <Button onClick={handleGoals}>Save</Button> */}
-            {currentWeight !== -1 && selectedGender && trainingFactor !== -1 ? (
+            {currentWeight === -1 || trainingFactor === -1 ? (
               <Button disabled>Save</Button>
             ) : (
               <Button onClick={handleGoals}>Save</Button>
