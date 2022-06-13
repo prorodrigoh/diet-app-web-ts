@@ -19,7 +19,7 @@ import { GlobalVarContext } from "../App";
 import { createUser, getUserByEmail } from "../services/user";
 
 export const Signup: FC = () => {
-  const { setLoggedUser } = useContext(GlobalVarContext);
+  const { setLoggedUser, setNewUser } = useContext(GlobalVarContext);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -36,8 +36,9 @@ export const Signup: FC = () => {
       email,
       ageGroup,
     });
-    const id = await getUserByEmail(email);
-    setLoggedUser(id);
+    const { _id } = await getUserByEmail(email);
+    setLoggedUser(_id);
+    setNewUser(true);
     navigate("/dashboard");
   };
 
@@ -74,6 +75,8 @@ export const Signup: FC = () => {
             Select your Age Group
           </InputLabel>
         </FormControl>
+      </div>
+      <div>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <Select
             labelId="demo-simple-select-filled-label"
@@ -90,12 +93,19 @@ export const Signup: FC = () => {
         </FormControl>
       </div>
       <div>
-        <FormControl>
+        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <div>
             {!ageGroup || !firstName || !email ? (
               <Button disabled>Create User</Button>
             ) : (
-              <Button onClick={signup}>Create User</Button>
+              <Button
+                onClick={signup}
+                variant="contained"
+                component="span"
+                size="large"
+              >
+                Create User
+              </Button>
             )}
           </div>
         </FormControl>

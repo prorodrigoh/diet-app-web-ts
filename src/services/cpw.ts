@@ -16,7 +16,7 @@ export const getAllCPW = async () => {
   return data as CPW[];
 };
 
-export const createCPW = (cpw: CPW) => {
+export const createFoodCPW = (cpw: CPW) => {
   const client = getClient();
   client.post("/createcpw", cpw);
 };

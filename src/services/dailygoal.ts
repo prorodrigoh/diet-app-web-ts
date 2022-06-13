@@ -15,6 +15,11 @@ export const createDailyGoal = (dailyGoal: DailyGoal) => {
   client.post("/createdailygoal", dailyGoal);
 };
 
+export const updateCaloriesDailyGoal = (goalId: string, dailyGoal: number) => {
+  const client = getClient();
+  client.post(`/updatecaldailygoal/${goalId}`, { dailyCalories: dailyGoal });
+};
+
 export const getCurrentDailyGoalByUser = async (userId: string) => {
   const client = getClient();
   const { data } = await client.get(`/dailygoalbyuser/${userId}`);

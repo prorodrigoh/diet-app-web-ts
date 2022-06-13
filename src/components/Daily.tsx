@@ -11,9 +11,13 @@ import { ChangeEvent, FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
 import { Food, getAllFoodsByUser, getFoodById } from "../services/food";
-import { createCPW } from "../services/cpw";
+import { createFoodCPW } from "../services/cpw";
 import { getCurrentWeekGoalByUser } from "../services/goal";
-import { createDailyGoal } from "../services/dailygoal";
+import {
+  createDailyGoal,
+  getCurrentDailyGoalByUser,
+  updateCaloriesDailyGoal,
+} from "../services/dailygoal";
 
 // Phase 1
 // Page will display Current weight, Daily Calories Goal, Days until next weight-in
@@ -60,8 +64,9 @@ export const Daily: FC = () => {
   // we check if a daily goal is set.
 
   const checkIfDailyGoalExists = async () => {
-    const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
-    if (!dataBefore) {
+    const dataBefore = await getCurrentDailyGoalByUser(loggedUser);
+    console.log("databefore", dataBefore.length);
+    if (dataBefore.length === 0) {
       return false;
     }
     return true;
@@ -69,11 +74,11 @@ export const Daily: FC = () => {
 
   // if it is not, we create it
 
-  const createDayGoal = async () => {
+  const addNewDailyGoal = async () => {
     const data = await getCurrentWeekGoalByUser(loggedUser);
     const goalId = data[0]._id;
 
-    const dailyCalories = data[0].currentCalories - foodCalories;
+    const dailyCalories = data[0].currentCalories - foodCalories; //foodcalories comes from calculateCPW
     const daysToWeightIn = 7;
 
     createDailyGoal({
@@ -87,20 +92,32 @@ export const Daily: FC = () => {
   // we subtract the food calories from it
 
   const updateDailyGoal = async () => {
-    //
+    const data = await getCurrentDailyGoalByUser(loggedUser);
+    const goalId = data[0]._id;
+    console.log(goalId);
+    const dailyCalories = data[0].currentCalories - foodCalories; //foodcalories comes from calculateCPW
+
+    updateCaloriesDailyGoal(goalId, dailyCalories);
   };
 
   const handleCreateCPW = async () => {
+    // make the calculations based on the input
     calculateCPW();
     const exists = await checkIfDailyGoalExists();
-    if (exists) {
-      updateDailyGoal();
-    } else {
-      createDayGoal();
+    try {
+      if (exists) {
+        console.log("update");
+        updateDailyGoal();
+      } else {
+        console.log("create");
+        addNewDailyGoal();
+      }
+    } catch (err) {
+      return console.log(err, { message: "error handle create cpw" });
     }
-
+    // if the CPW is there, we just need to update the value
     const createdAt = new Date();
-    createCPW({
+    createFoodCPW({
       createdAt,
       foodId,
       foodWeight,

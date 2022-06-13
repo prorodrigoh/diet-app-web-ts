@@ -35,7 +35,6 @@ import { getUserByEmail } from "../services/user";
 export const Login: FC = () => {
   const { setLoggedUser } = useContext(GlobalVarContext);
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   let navigate = useNavigate();
 
   const handleLogin = async () => {
@@ -69,7 +68,7 @@ export const Login: FC = () => {
           />
         </FormControl>
       </div>
-      <div>
+      {/* <div>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <Input
             type="password"
@@ -79,7 +78,7 @@ export const Login: FC = () => {
             placeholder="Password"
           />
         </FormControl>
-      </div>
+      </div> */}
       <div>
         <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
           <Button

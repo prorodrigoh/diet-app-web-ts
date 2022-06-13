@@ -35,33 +35,27 @@ const theme = createTheme({
 export type GlobalContent = {
   loggedUser: any;
   setLoggedUser: (c: any) => void;
+  newUser: any;
+  setNewUser: (c: any) => void;
 };
 
 export const GlobalVarContext = createContext<GlobalContent>({
   loggedUser: undefined, // set a default value
   setLoggedUser: () => {},
+  newUser: false, // set a default to FALSE
+  setNewUser: () => {},
 }); // higher order component to store global values to be used throughout the application
 
 // export const globalVarContext = useContext(GlobalVarContext);
 
 export const App: FC = () => {
   const [loggedUser, setLoggedUser] = useState(); // user evaluates to falsy at first
-  // const [users, setUsers] = useState<User[]>([]);
-  // const [foods, setFoods] = useState<Food[]>([]);
-  // const [cpws, setCpws] = useState<CPW[]>([]);
-
-  // useEffect(() => {
-  //   getAllUsers().then(setUsers);
-  // }, [users]);
-  // useEffect(() => {
-  //   getAllFoods().then(setFoods);
-  // }, [foods]);
-  // useEffect(() => {
-  //   getAllCPW().then(setCpws);
-  // }, [cpws]);
+  const [newUser, setNewUser] = useState();
 
   return (
-    <GlobalVarContext.Provider value={{ loggedUser, setLoggedUser }}>
+    <GlobalVarContext.Provider
+      value={{ loggedUser, setLoggedUser, newUser, setNewUser }}
+    >
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>

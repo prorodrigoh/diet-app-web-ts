@@ -24,7 +24,7 @@ import { getUserById } from "../services/user";
 // When the CalculateGoal page is done this will replace the first value
 
 export const Goal: FC = () => {
-  const { loggedUser } = useContext(GlobalVarContext);
+  const { loggedUser, setNewUser } = useContext(GlobalVarContext);
   let navigate = useNavigate();
 
   if (!loggedUser) {
@@ -91,6 +91,7 @@ export const Goal: FC = () => {
       currentWeight,
       currentCalories,
     });
+    setNewUser(false);
     return id;
   };
   const checkIfWeekGoalExists = async () => {
