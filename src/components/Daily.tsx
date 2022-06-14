@@ -65,7 +65,6 @@ export const Daily: FC = () => {
 
   const checkIfDailyGoalExists = async () => {
     const dataBefore = await getCurrentDailyGoalByUser(loggedUser);
-    console.log("databefore", dataBefore.length);
     if (dataBefore.length === 0) {
       return false;
     }
@@ -78,7 +77,7 @@ export const Daily: FC = () => {
     const data = await getCurrentWeekGoalByUser(loggedUser);
     const goalId = data[0]._id;
 
-    const dailyCalories = data[0].currentCalories - foodCalories; //foodcalories comes from calculateCPW
+    const dailyCalories = Math.floor(data[0].currentCalories - foodCalories); //foodcalories comes from calculateCPW
     const daysToWeightIn = 7;
 
     createDailyGoal({
@@ -94,10 +93,10 @@ export const Daily: FC = () => {
   const updateDailyGoal = async () => {
     const data = await getCurrentDailyGoalByUser(loggedUser);
     const goalId = data[0]._id;
-    console.log(goalId);
-    const dailyCalories = data[0].currentCalories - foodCalories; //foodcalories comes from calculateCPW
-
-    updateCaloriesDailyGoal(goalId, dailyCalories);
+    const dailyCalories = Math.floor(data[0].dailyCalories - foodCalories); //foodcalories comes from calculateCPW
+    // console.log(goalId, data[0].dailyCalories, foodCalories, dailyCalories);
+    const resultUpd = await updateCaloriesDailyGoal(goalId, dailyCalories);
+    // console.log("Daily.tsx:", resultUpd);
   };
 
   const handleCreateCPW = async () => {

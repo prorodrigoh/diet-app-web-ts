@@ -15,13 +15,19 @@ export const createDailyGoal = (dailyGoal: DailyGoal) => {
   client.post("/createdailygoal", dailyGoal);
 };
 
-export const updateCaloriesDailyGoal = (goalId: string, dailyGoal: number) => {
+export const updateCaloriesDailyGoal = (goalId: string, value: number) => {
   const client = getClient();
-  client.post(`/updatecaldailygoal/${goalId}`, { dailyCalories: dailyGoal });
+  console.log(`/updatecaldailygoal/${goalId}`, value);
+  const retUpd = client.patch(`/updatecaldailygoal/${goalId}`, {
+    dailyCalories: value,
+  });
+  return retUpd;
 };
 
 export const getCurrentDailyGoalByUser = async (userId: string) => {
   const client = getClient();
-  const { data } = await client.get(`/dailygoalbyuser/${userId}`);
+
+  let { data } = await client.get(`/currentweekgoalbyuser/${userId}`);
+  ({ data } = await client.get(`/dailygoalbygoalid/${data[0]._id}`));
   return data;
 };

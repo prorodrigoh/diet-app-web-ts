@@ -22,7 +22,7 @@ export const ListFoods: FC = () => {
   // Get all foods of the day by user
   useEffect(() => {
     getAllFoodsOfTheDayByUser(loggedUser).then(setFoods);
-  }, []);
+  }, [foods]);
   // Get all CPW by food for that day
 
   return (

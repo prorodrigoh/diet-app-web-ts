@@ -2,6 +2,7 @@ import { FormControl, FormLabel } from "@mui/material";
 import { FC, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
+import { getCurrentDailyGoalByUser } from "../services/dailygoal";
 import { getCurrentWeekGoalByUser } from "../services/goal";
 import { getUserById } from "../services/user";
 
@@ -22,12 +23,13 @@ export const ListStats: FC = () => {
     const { firstName, lastName } = await getUserById(loggedUser);
     setDisplayName(firstName + " " + lastName);
     // weekgoal
-    const data = await getCurrentWeekGoalByUser(loggedUser);
-    setDisplayCurrentWeight(data[0].currentWeight);
-    setDisplayCurrentCalories(data[0].currentCalories);
+    const dataWeek = await getCurrentWeekGoalByUser(loggedUser);
+    setDisplayCurrentWeight(dataWeek[0].currentWeight);
+    setDisplayCurrentCalories(dataWeek[0].currentCalories);
     // dailygoal
-    setDisplayDaysToWeightIn(7);
-    setDisplayCaloriesLeft(data[0].currentCalories);
+    const dataDay = await getCurrentDailyGoalByUser(loggedUser);
+    setDisplayDaysToWeightIn(dataDay[0].daysToWeightIn);
+    setDisplayCaloriesLeft(dataDay[0].dailyCalories);
   };
 
   stats();
