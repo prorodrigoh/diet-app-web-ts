@@ -6,7 +6,7 @@ import { Signup } from "./components/Signup";
 import { NewFood } from "./components/Food";
 import { Landing } from "./components/Landing";
 import { Daily } from "./components/Daily";
-import { Chart } from "./components/Chart";
+import { Chart } from "./components/DashboardChart";
 import { Goal } from "./components/Goal";
 import { Login } from "./components/Login";
 import { Dashboard } from "./components/Dashboard";
