@@ -10,6 +10,7 @@ import { Chart } from "./components/Chart";
 import { Goal } from "./components/Goal";
 import { Login } from "./components/Login";
 import { Dashboard } from "./components/Dashboard";
+import { Template } from "./components/Template";
 
 const theme = createTheme({
   typography: {
@@ -76,6 +77,7 @@ export const App: FC = () => {
           <Route path="/food" element={!loggedUser ? <Login /> : <NewFood />} />
           <Route path="/chart" element={!loggedUser ? <Login /> : <Chart />} />
           <Route path="/daily" element={!loggedUser ? <Login /> : <Daily />} />
+          <Route path="/template" element={<Template />} />
         </Routes>
       </ThemeProvider>
     </GlobalVarContext.Provider>

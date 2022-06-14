@@ -1,105 +1,154 @@
-// Phase 2
-
-// User input email, password
-// On click the Login button, if user exists, it will redirect to Home page
-// If user doesn't exists, error message will show email/password incorrect
-
-import { useState, useContext, FC } from "react";
+import { FC } from "react";
 import { useNavigate } from "react-router-dom";
+import * as React from "react";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import Link from "@mui/material/Link";
+import Paper from "@mui/material/Paper";
+import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
+import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import Typography from "@mui/material/Typography";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { GlobalVarContext } from "../App";
-// import {
-//   getAuth,
-//   signInWithEmailAndPassword,
-//   GoogleAuthProvider,
-//   signInWithPopup,
-// } from "@firebase/auth";
-// import { initializeApp } from "@firebase/app";
-import { Button, FormControl, FormHelperText, Input } from "@mui/material";
 import { getUserByEmail } from "../services/user";
 
-// // Firebase configuration
-// const firebaseConfig = {
-//   apiKey: "AIzaSyBDNy_hyDSaDW0TqK_JWvBIsdbLAh3mf-o",
-//   authDomain: "my-first-firestore-rh.firebaseapp.com",
-//   projectId: "my-first-firestore-rh",
-//   storageBucket: "my-first-firestore-rh.appspot.com",
-//   messagingSenderId: "1085784748225",
-//   appId: "1:1085784748225:web:d61f9a9bdd2bb35b092440",
-// };
-
-// const connectAuth = () => {
-//   const app = initializeApp(firebaseConfig); // Initialize Firebase
-//   return getAuth(app); // Connect to Firebase/Authentication
-// };
-
 export const Login: FC = () => {
-  const { setLoggedUser } = useContext(GlobalVarContext);
-  const [email, setEmail] = useState("");
+  const { setLoggedUser } = React.useContext(GlobalVarContext);
   let navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const Copyright = (props: any) => {
+    return (
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        align="center"
+        {...props}
+      >
+        {"Copyright © "}
+        <Link color="inherit" href="https://github.com/prorodrigoh/">
+          @prorodrigoh
+        </Link>{" "}
+        {new Date().getFullYear()}
+        {"."}
+      </Typography>
+    );
+  };
+
+  const theme = createTheme();
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     // const auth = connectAuth();
     // signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
     //   .then((res) => setLoggedUser(res.user))
     //   .then(() => navigate("/home"))
     //   .catch(console.error);
+    const data = new FormData(event.currentTarget);
+    const email = data.get("email") as any;
+    const password = data.get("password");
     const { _id } = await getUserByEmail(email);
     setLoggedUser(_id);
     navigate("/dashboard");
+
+    console.log({
+      email: data.get("email"),
+      password: data.get("password"),
+    });
   };
 
-  // const handleGoogleLogin = () => {
-  //   const auth = connectAuth();
-  //   const provider = new GoogleAuthProvider();
-  //   signInWithPopup(auth, provider)
-  //     .then((res) => setLoggedUser(res.user))
-  //     .catch(console.error);
-  // };
+  const handleSignup = () => {
+    navigate("/signup");
+  };
 
   return (
-    <>
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <Input
-            value={email}
-            name="email"
-            onChange={(e) => setEmail(e.target.value as any)}
-            placeholder="Email"
-          />
-        </FormControl>
-      </div>
-      {/* <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <Input
-            type="password"
-            value={password}
-            name="password"
-            onChange={(e) => setPassword(e.target.value as any)}
-            placeholder="Password"
-          />
-        </FormControl>
-      </div> */}
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <Button
-            onClick={handleLogin}
-            variant="contained"
-            component="span"
-            size="large"
-            aria-describedby="my-helper-text"
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
+        <CssBaseline />
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
+          sx={{
+            backgroundImage:
+              "url(https://source.unsplash.com/random/800x600/?food)",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
-            Login
-          </Button>
-          <FormHelperText id="my-helper-text" hidden>
-            Access the application
-          </FormHelperText>
-        </FormControl>
-      </div>
-      {/* <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <Button onClick={handleGoogleLogin}>Google Login</Button>
-        </FormControl>
-      </div> */}
-    </>
+            <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
+              <LockOutlinedIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Welcome to your Diet App
+            </Typography>
+            <Box
+              component="form"
+              noValidate
+              onSubmit={handleSubmit}
+              sx={{ mt: 1 }}
+            >
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="email"
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
+              />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+              />
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Continue your journey
+              </Button>
+
+              <Button
+                onClick={handleSignup}
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
+              >
+                Start your journey now !
+              </Button>
+
+              <Copyright sx={{ mt: 5 }} />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </ThemeProvider>
   );
 };

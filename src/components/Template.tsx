@@ -18,7 +18,7 @@ import { GlobalVarContext } from "../App";
 import { createUser, getUserByEmail } from "../services/user";
 import { Container, MenuItem, Select } from "@mui/material";
 
-export const Signup: FC = () => {
+export const Template: FC = () => {
   const { setLoggedUser, setNewUser } = React.useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [ageGroup, setAgeGroup] = React.useState(0);
@@ -88,7 +88,7 @@ export const Signup: FC = () => {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Start your journey
+            Sign up
           </Typography>
           <Box
             component="form"
@@ -162,7 +162,7 @@ export const Signup: FC = () => {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Make your first step now !
+              Sign Up
             </Button>
             <Button
               type="submit"
@@ -171,7 +171,7 @@ export const Signup: FC = () => {
               sx={{ mt: 3, mb: 2 }}
               onClick={handleSignIn}
             >
-              Continue your journey here
+              Already have an account? Sign in
             </Button>
           </Box>
         </Box>
