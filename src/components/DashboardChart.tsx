@@ -1,4 +1,3 @@
-import { Button } from "@mui/material";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -13,34 +12,39 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import Title from "./DashboardTitle";
+import { GlobalVarContext } from "../App";
 
 // Phase 2
 // get data from DB
 // generates a line chart for weight X Time (weeks)
 
-export const Chart: FC = () => {
+export const DashboardChart: FC = () => {
+  const { loggedUser } = React.useContext(GlobalVarContext);
   let navigate = useNavigate();
-  // Generate Sales Data
+
+  if (!loggedUser) {
+    navigate("/login");
+  }
+
   function createData(time: string, amount?: number) {
     return { time, amount };
   }
 
   const data = [
-    createData("00:00", 0),
-    createData("03:00", 300),
-    createData("06:00", 600),
-    createData("09:00", 800),
-    createData("12:00", 1500),
-    createData("15:00", 2000),
-    createData("18:00", 2400),
-    createData("21:00", 2400),
-    createData("24:00", undefined),
+    createData("0", 1693),
+    createData("1", 1800),
+    createData("2", 1750),
+    createData("3", 1600),
+    createData("4", 1345),
+    createData("5", 1924),
+    createData("6", 1549),
+    createData("7", 1802),
   ];
   const theme = useTheme();
 
   return (
     <React.Fragment>
-      <Title>Today</Title>
+      <Title>Week Calories Intake Variation - Future Feature</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}

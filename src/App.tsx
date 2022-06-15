@@ -6,7 +6,6 @@ import { Signup } from "./components/Signup";
 import { NewFood } from "./components/Food";
 import { Landing } from "./components/Landing";
 import { Daily } from "./components/Daily";
-import { Chart } from "./components/DashboardChart";
 import { Goal } from "./components/Goal";
 import { Login } from "./components/Login";
 import { Dashboard } from "./components/Dashboard";
@@ -60,7 +59,7 @@ export const App: FC = () => {
       <ThemeProvider theme={theme}>
         <CssBaseline />
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Login />} />
           <Route
             path="/login"
             element={!loggedUser ? <Login /> : <Dashboard />}
@@ -75,7 +74,6 @@ export const App: FC = () => {
           />
           <Route path="/goal" element={!loggedUser ? <Login /> : <Goal />} />
           <Route path="/food" element={!loggedUser ? <Login /> : <NewFood />} />
-          <Route path="/chart" element={!loggedUser ? <Login /> : <Chart />} />
           <Route path="/daily" element={!loggedUser ? <Login /> : <Daily />} />
           <Route path="/template" element={<Template />} />
         </Routes>

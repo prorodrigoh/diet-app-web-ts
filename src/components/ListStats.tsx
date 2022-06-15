@@ -1,19 +1,16 @@
-import { FormControl, FormLabel } from "@mui/material";
+import { FormControl, FormLabel, Grid, Paper } from "@mui/material";
 import { FC, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
-import { getCurrentDailyGoalByUser } from "../services/dailygoal";
-import { getCurrentWeekGoalByUser } from "../services/goal";
 import { getUserById } from "../services/user";
+import { DashboardChart } from "./DashboardChart";
+import { DashboardDailyCalories } from "./DashboardDailyCalories";
+import { DashboardDailyFoods } from "./DashboardDailyFoods";
 
 export const ListStats: FC = () => {
   const { loggedUser } = useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [displayName, setDisplayName] = useState("display not set");
-  const [displayCurrentWeight, setDisplayCurrentWeight] = useState(0);
-  const [displayCurrentCalories, setDisplayCurrentCalories] = useState(0);
-  const [displayDaysToWeightIn, setDisplayDaysToWeightIn] = useState(0);
-  const [displayCaloriesLeft, setDisplayCaloriesLeft] = useState(0);
 
   if (!loggedUser) {
     navigate("/login");
@@ -22,48 +19,47 @@ export const ListStats: FC = () => {
   const stats = async () => {
     const { firstName, lastName } = await getUserById(loggedUser);
     setDisplayName(firstName + " " + lastName);
-    // weekgoal
-    const dataWeek = await getCurrentWeekGoalByUser(loggedUser);
-    setDisplayCurrentWeight(dataWeek[0].currentWeight);
-    setDisplayCurrentCalories(dataWeek[0].currentCalories);
-    // dailygoal
-    const dataDay = await getCurrentDailyGoalByUser(loggedUser);
-    setDisplayDaysToWeightIn(dataDay[0].daysToWeightIn);
-    setDisplayCaloriesLeft(dataDay[0].dailyCalories);
   };
 
   stats();
+
   return (
     <>
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <FormLabel>Welcome {displayName} to your Dashboard</FormLabel>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <FormLabel>This week's starting Weight</FormLabel>
-          <FormLabel>{displayCurrentWeight} Kg</FormLabel>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <FormLabel>This week's Calories per day Goal</FormLabel>
-          <FormLabel>{displayCurrentCalories} Cal/Day</FormLabel>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <FormLabel>Days until next weight in</FormLabel>
-          <FormLabel>{displayDaysToWeightIn}</FormLabel>
-        </FormControl>
-      </div>
-      <div>
-        <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-          <FormLabel>Calories left for today</FormLabel>
-          <FormLabel>{displayCaloriesLeft}</FormLabel>
-        </FormControl>
-      </div>
+      <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+        <FormLabel>Welcome {displayName} to your Dashboard</FormLabel>
+      </FormControl>
+      {/* Week daily calories variance */}
+      <Grid item xs={12} md={8} lg={9}>
+        <Paper
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            height: 360,
+          }}
+        >
+          <DashboardChart />
+        </Paper>
+      </Grid>
+      {/* Amount of calories left for the day */}
+      <Grid item xs={12} md={4} lg={3}>
+        <Paper
+          sx={{
+            p: 2,
+            display: "flex",
+            flexDirection: "column",
+            height: 360,
+          }}
+        >
+          <DashboardDailyCalories />
+        </Paper>
+      </Grid>
+      {/* Foods eaten at that day */}
+      <Grid item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <DashboardDailyFoods />
+        </Paper>
+      </Grid>
     </>
   );
 };

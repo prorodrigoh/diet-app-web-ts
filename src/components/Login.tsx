@@ -14,28 +14,11 @@ import Typography from "@mui/material/Typography";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { GlobalVarContext } from "../App";
 import { getUserByEmail } from "../services/user";
+import { Copyright } from "./Copyright";
 
 export const Login: FC = () => {
   const { setLoggedUser } = React.useContext(GlobalVarContext);
   let navigate = useNavigate();
-
-  const Copyright = (props: any) => {
-    return (
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        {...props}
-      >
-        {"Copyright © "}
-        <Link color="inherit" href="https://github.com/prorodrigoh/">
-          @prorodrigoh
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
-  };
 
   const theme = createTheme();
 
@@ -52,11 +35,7 @@ export const Login: FC = () => {
     const { _id } = await getUserByEmail(email);
     setLoggedUser(_id);
     navigate("/dashboard");
-
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    // navigate("/template");
   };
 
   const handleSignup = () => {
@@ -116,7 +95,7 @@ export const Login: FC = () => {
                 autoComplete="email"
                 autoFocus
               />
-              <TextField
+              {/* <TextField
                 margin="normal"
                 required
                 fullWidth
@@ -125,7 +104,7 @@ export const Login: FC = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
-              />
+              /> */}
               <Button
                 type="submit"
                 fullWidth

@@ -17,29 +17,12 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { GlobalVarContext } from "../App";
 import { createUser, getUserByEmail } from "../services/user";
 import { Container, MenuItem, Select } from "@mui/material";
+import { Copyright } from "./Copyright";
 
 export const Signup: FC = () => {
   const { setLoggedUser, setNewUser } = React.useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [ageGroup, setAgeGroup] = React.useState(0);
-
-  const Copyright = (props: any) => {
-    return (
-      <Typography
-        variant="body2"
-        color="text.secondary"
-        align="center"
-        {...props}
-      >
-        {"Copyright © "}
-        <Link color="inherit" href="https://github.com/prorodrigoh/">
-          @prorodrigoh
-        </Link>{" "}
-        {new Date().getFullYear()}
-        {"."}
-      </Typography>
-    );
-  };
 
   const theme = createTheme();
 
