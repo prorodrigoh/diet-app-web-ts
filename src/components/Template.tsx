@@ -1,160 +1,285 @@
-import * as React from "react";
-import { styled, createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import MuiDrawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
-import IconButton from "@mui/material/IconButton";
-import Container from "@mui/material/Container";
-import Grid from "@mui/material/Grid";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { DashboardSideNavBar } from "./DashboardSideNavBar";
-
-import { useNavigate } from "react-router-dom";
+import {
+  Box,
+  Button,
+  createTheme,
+  CssBaseline,
+  FormControl,
+  Grid,
+  MenuItem,
+  Paper,
+  Radio,
+  Select,
+  TextField,
+  ThemeProvider,
+  Typography,
+} from "@mui/material";
+import { FC, useContext, useState } from "react";
 import { GlobalVarContext } from "../App";
-// import { ListFoods } from "./ListFoods";
-import { ListStats } from "./ListStats";
+import { useNavigate } from "react-router-dom";
+import { createGoal, getCurrentWeekGoalByUser } from "../services/goal";
+import { getUserById } from "../services/user";
 import { Copyright } from "./Copyright";
 
-export const Template: React.FC = () => {
-  const { loggedUser } = React.useContext(GlobalVarContext);
+const theme = createTheme();
+
+// Phase 1 - a
+// Get last Body weight and calories goal from DB and populate the fields Previous weight/calories
+// User input new values into the fields New Body Weight and New Calories Goal
+// Save new values to DB
+
+// As initial values, before the page CalculateGoal is done, the application will show 0 for both fields
+// When the user signup we will create the first value as 0
+// When the CalculateGoal page is done this will replace the first value
+
+export const Template: FC = () => {
+  const { loggedUser, setNewUser } = useContext(GlobalVarContext);
   let navigate = useNavigate();
 
-  if (!loggedUser) {
-    navigate("/login");
-  }
+  // if (!loggedUser) {
+  //   navigate("/login");
+  // }
+  const [selectedGender, setSelectedGender] = useState("m");
+  const [currentWeight, setCurrentWeight] = useState(-1);
+  const [trainingFactor, setTrainingFactor] = useState(-1);
 
-  const drawerWidth: number = 240;
+  let previousWeight: number = -1,
+    previousCalories: number = -1,
+    currentCalories: number = -1;
 
-  interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-  }
+  const calculateGoals = async () => {
+    let calculation = -1;
+    const datauser = await getUserById(loggedUser);
 
-  const AppBar = styled(MuiAppBar, {
-    shouldForwardProp: (prop) => prop !== "open",
-  })<AppBarProps>(({ theme, open }) => ({
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
-    ...(open && {
-      marginLeft: drawerWidth,
-      width: `calc(100% - ${drawerWidth}px)`,
-      transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    }),
-  }));
+    if (selectedGender === "m") {
+      switch (datauser.ageGroup) {
+        case 1:
+          calculation = currentWeight * trainingFactor * 17.5 + 651;
+          break;
+        case 2:
+          calculation = currentWeight * trainingFactor * 15.3 + 679;
+          break;
+        case 3:
+          calculation = currentWeight * trainingFactor * 8.7 + 879;
+          break;
+        case 4:
+          calculation = currentWeight * trainingFactor * 13.5 + 487;
+          break;
+        default:
+          calculation = -9999;
+          break;
+      }
+    } else {
+      switch (datauser.ageGroup) {
+        case 1:
+          calculation = currentWeight * trainingFactor * 12.2 + 746;
+          break;
+        case 2:
+          calculation = currentWeight * trainingFactor * 14.7 + 496;
+          break;
+        case 3:
+          calculation = currentWeight * trainingFactor * 8.7 + 829;
+          break;
+        case 4:
+          calculation = currentWeight * trainingFactor * 10.5 + 596;
+          break;
+        default:
+          calculation = -9999;
+          break;
+      }
+    }
+    return calculation as number;
+  };
 
-  const Drawer = styled(MuiDrawer, {
-    shouldForwardProp: (prop) => prop !== "open",
-  })(({ theme, open }) => ({
-    "& .MuiDrawer-paper": {
-      position: "relative",
-      whiteSpace: "nowrap",
-      width: drawerWidth,
-      transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: "border-box",
-      ...(!open && {
-        overflowX: "hidden",
-        transition: theme.transitions.create("width", {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up("sm")]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }));
+  const createWeekGoal = async (userId: string) => {
+    const id = createGoal({
+      userId,
+      trainingFactor,
+      previousWeight,
+      previousCalories,
+      currentWeight,
+      currentCalories,
+    });
+    setNewUser(false);
+    return id;
+  };
+  const checkIfWeekGoalExists = async () => {
+    const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
+    // check if collection is empty
+    if (dataBefore.length === 0) {
+      return false;
+    }
+    previousWeight = dataBefore[0].currentWeight;
+    previousCalories = dataBefore[0].currentCalories;
+    return true;
+  };
 
-  const mdTheme = createTheme();
+  const handleGoals = async () => {
+    // const createdAt = new Date();
+    const userId = loggedUser as any;
+    const result = await calculateGoals();
+    currentCalories = Math.floor(result);
 
-  const [open, setOpen] = React.useState(true);
-  const toggleDrawer = () => {
-    setOpen(!open);
+    const exists = await checkIfWeekGoalExists();
+    // a way to block execution before previous await
+    if (exists) {
+      createWeekGoal(userId);
+    } else {
+      createWeekGoal(userId);
+    }
+
+    navigate("/dashboard");
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedGender(event.target.value);
   };
 
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Box sx={{ display: "flex" }}>
+    <ThemeProvider theme={theme}>
+      <Grid container component="main" sx={{ height: "100vh" }}>
         <CssBaseline />
-        <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: "24px", // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: "36px",
-                ...(open && { display: "none" }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-          <Divider />
-          <DashboardSideNavBar />
-        </Drawer>
-        <Box
-          component="main"
+        <Grid
+          item
+          xs={false}
+          sm={4}
+          md={7}
           sx={{
-            backgroundColor: (theme) =>
-              theme.palette.mode === "light"
-                ? theme.palette.grey[100]
-                : theme.palette.grey[900],
-            flexGrow: 1,
-            height: "100vh",
-            overflow: "auto",
+            backgroundImage:
+              "url(https://source.unsplash.com/random/800x600/?food)",
+            backgroundRepeat: "no-repeat",
+            backgroundColor: (t) =>
+              t.palette.mode === "light"
+                ? t.palette.grey[50]
+                : t.palette.grey[900],
+            backgroundSize: "cover",
+            backgroundPosition: "center",
           }}
-        >
-          <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              <ListStats />
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
-          </Container>
-        </Box>
-      </Box>
+        />
+        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+          <Box
+            sx={{
+              my: 8,
+              mx: 4,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <Box component="form" noValidate sx={{ mt: 1 }}>
+              <Typography component="h1" variant="h4" textAlign={"center"}>
+                Calculate your calories weekly goal
+              </Typography>
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="currentWeight"
+                label="Current Weight (Kg)"
+                autoFocus
+                name="currentWeight"
+                placeholder="Current Weight (Kg)"
+                onChange={(e) => setCurrentWeight(e.target.value as any)}
+              />
+
+              <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+                <p>
+                  <Radio
+                    checked={selectedGender === "m"}
+                    onChange={handleChange}
+                    value="m"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "A" }}
+                  />
+                  MEN
+                </p>
+                <p>
+                  <Radio
+                    checked={selectedGender === "w"}
+                    onChange={handleChange}
+                    value="w"
+                    name="radio-buttons"
+                    inputProps={{ "aria-label": "B" }}
+                  />
+                  WOMEN
+                </p>
+              </FormControl>
+
+              <Typography component="h1" variant="h6" textAlign={"center"}>
+                Physical Activity Level
+              </Typography>
+              {selectedGender === "m" ? (
+                <Select
+                  fullWidth
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  value={trainingFactor}
+                  onChange={(e) => setTrainingFactor(e.target.value as any)}
+                >
+                  <MenuItem value={-1}>Select an option</MenuItem>
+                  <MenuItem value={1.2}>No extra activity</MenuItem>
+                  <MenuItem value={1.3}>Less than 3x a week</MenuItem>
+                  <MenuItem value={1.35}>
+                    3x per week at least 30 minutes
+                  </MenuItem>
+                  <MenuItem value={1.45}>
+                    3x per week at least 60 minutes
+                  </MenuItem>
+                  <MenuItem value={1.5}>Daily between 1 and 3 hours</MenuItem>
+                  <MenuItem value={1.7}>Daily for more than 3 hours</MenuItem>
+                </Select>
+              ) : (
+                <Select
+                  labelId="demo-simple-select-filled-label"
+                  id="demo-simple-select-filled"
+                  value={trainingFactor}
+                  onChange={(e) => setTrainingFactor(e.target.value as any)}
+                >
+                  <MenuItem value={-1}>Select an option</MenuItem>
+                  <MenuItem value={1.2}>No extra activity</MenuItem>
+                  <MenuItem value={1.3}>Less than 3x a week</MenuItem>
+                  <MenuItem value={1.4}>
+                    3x per week at least 30 minutes
+                  </MenuItem>
+                  <MenuItem value={1.5}>
+                    3x per week at least 60 minutes
+                  </MenuItem>
+                  <MenuItem value={1.6}>Daily between 1 and 3 hours</MenuItem>
+                  <MenuItem value={1.8}>Daily for more than 3 hours</MenuItem>
+                </Select>
+              )}
+
+              <Typography component="h1" variant="h6" textAlign={"center"}>
+                Set your Goals for the week
+              </Typography>
+              {currentWeight === -1 || trainingFactor === -1 ? (
+                <Button disabled>Save</Button>
+              ) : (
+                <Button
+                  fullWidth
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleGoals}
+                  variant="contained"
+                  component="span"
+                  size="large"
+                >
+                  Save
+                </Button>
+              )}
+              <Button
+                fullWidth
+                sx={{ mt: 3, mb: 2 }}
+                onClick={() => navigate("/dashboard")}
+                variant="contained"
+                component="span"
+                size="large"
+              >
+                Dashboard
+              </Button>
+              <Copyright sx={{ mt: 5 }} />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
     </ThemeProvider>
   );
 };

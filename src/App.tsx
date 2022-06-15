@@ -4,7 +4,6 @@ import { createContext, FC, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { Signup } from "./components/Signup";
 import { NewFood } from "./components/Food";
-import { Landing } from "./components/Landing";
 import { Daily } from "./components/Daily";
 import { Goal } from "./components/Goal";
 import { Login } from "./components/Login";
