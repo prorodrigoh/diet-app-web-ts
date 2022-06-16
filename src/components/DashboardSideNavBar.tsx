@@ -13,7 +13,8 @@ import { GlobalVarContext } from "../App";
 import { FC } from "react";
 
 export const DashboardSideNavBar: FC = () => {
-  const { loggedUser, setLoggedUser } = React.useContext(GlobalVarContext);
+  const { loggedUser, setLoggedUser, newUser } =
+    React.useContext(GlobalVarContext);
   let navigate = useNavigate();
 
   if (!loggedUser) {
@@ -23,18 +24,34 @@ export const DashboardSideNavBar: FC = () => {
   return (
     <>
       <List component="nav">
-        <ListItemButton onClick={() => navigate("/daily")}>
-          <ListItemIcon>
-            <DinnerDiningIcon />
-          </ListItemIcon>
-          <ListItemText primary="Add Food" />
-        </ListItemButton>
+        {!newUser ? (
+          <>
+            <ListItemButton onClick={() => navigate("/daily")}>
+              <ListItemIcon>
+                <DinnerDiningIcon />
+              </ListItemIcon>
+              <ListItemText primary="Add existing Food" />
+            </ListItemButton>
+          </>
+        ) : (
+          <></>
+        )}
+        <>
+          <ListItemButton onClick={() => navigate("/food")}>
+            <ListItemIcon>
+              <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Create a new Food" />
+          </ListItemButton>
+        </>
+        {/* --------------------------------------- */}
         <ListItemButton onClick={() => navigate("/goal")}>
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
           <ListItemText primary="Set Goal" />
         </ListItemButton>
+        {/* --------------------------------------- */}
         <ListItemButton
           onClick={() => {
             setLoggedUser("");
@@ -46,6 +63,7 @@ export const DashboardSideNavBar: FC = () => {
           </ListItemIcon>
           <ListItemText primary="Log Out" />
         </ListItemButton>
+        {/* --------------------------------------- */}
         <Divider sx={{ my: 1 }} />
         <ListSubheader component="div" inset>
           Future Feature - Reports

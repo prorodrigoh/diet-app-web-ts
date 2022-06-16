@@ -22,7 +22,10 @@ export const DashboardDailyFoods: React.FC = () => {
     const data: any = await getAllFoodsOfTheDayByUser(loggedUser);
     setFoods(data);
   };
-  getData();
+
+  React.useEffect(() => {
+    getData();
+  }, []);
 
   return (
     <React.Fragment>

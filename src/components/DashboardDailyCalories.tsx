@@ -8,7 +8,8 @@ import Title from "./DashboardTitle";
 import { GlobalVarContext } from "../App";
 
 export const DashboardDailyCalories: FC = () => {
-  const { loggedUser } = useContext(GlobalVarContext);
+  const { loggedUser, setChartDailyCalories, setChartDaysToWeightIn } =
+    useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [displayCurrentWeight, setDisplayCurrentWeight] = useState(0);
   const [displayCurrentCalories, setDisplayCurrentCalories] = useState(0);
@@ -20,18 +21,22 @@ export const DashboardDailyCalories: FC = () => {
   }
 
   const stats = async () => {
-    console.log(loggedUser);
     // weekgoal
     const dataWeek = await getCurrentWeekGoalByUser(loggedUser);
     setDisplayCurrentWeight(dataWeek[0].currentWeight);
     setDisplayCurrentCalories(dataWeek[0].currentCalories);
+    setChartDaysToWeightIn(dataWeek[0].currentWeight);
     // dailygoal
     const dataDay = await getCurrentDailyGoalByUser(loggedUser);
     setDisplayDaysToWeightIn(dataDay[0].daysToWeightIn);
     setDisplayCaloriesLeft(dataDay[0].dailyCalories);
+    setChartDailyCalories(dataDay[0].dailyCalories);
   };
 
-  stats();
+  React.useEffect(() => {
+    stats();
+  }, []);
+
   return (
     <React.Fragment>
       <Title>Current Weight (Kg/Lbs)</Title>

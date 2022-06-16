@@ -102,6 +102,7 @@ export const Goal: FC = () => {
     setNewUser(false);
     return id;
   };
+
   const checkIfWeekGoalExists = async () => {
     const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
     // check if collection is empty

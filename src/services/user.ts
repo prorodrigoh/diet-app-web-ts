@@ -3,15 +3,19 @@ import { getClient } from "./client";
 export interface User {
   _id?: String;
   createdAt?: Date;
-  firstName: string;
-  lastName: string;
+  uid?: string;
+  googleName?: string;
   email: string;
+  password?: string;
+  firstName?: string;
+  lastName?: string;
   ageGroup: number;
 }
 
 // http requests
 
 export const createUser = (user: User) => {
+  console.log(user);
   const client = getClient();
   const id = client.post("/signup", user);
   return id;

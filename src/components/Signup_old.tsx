@@ -29,8 +29,14 @@ export const Signup: FC = () => {
   const signup = async (e: FormEvent) => {
     e.preventDefault();
     const createdAt = new Date();
+    const uid = "";
+    const googleName = "";
+    const password = "";
     createUser({
       createdAt,
+      uid,
+      googleName,
+      password,
       firstName,
       lastName,
       email,

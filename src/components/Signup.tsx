@@ -20,7 +20,8 @@ import { Container, MenuItem, Select } from "@mui/material";
 import { Copyright } from "./Copyright";
 
 export const Signup: FC = () => {
-  const { setLoggedUser, setNewUser } = React.useContext(GlobalVarContext);
+  const { setLoggedUser, setNewUser, googleUserObj } =
+    React.useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [ageGroup, setAgeGroup] = React.useState(0);
 
@@ -30,15 +31,34 @@ export const Signup: FC = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
-    const email = data.get("email") as any;
-    const firstName = data.get("firstName") as any;
-    const lastName = data.get("lastName") as any;
-    const ageGroup = data.get("ageGroup") as any;
-    // const password = data.get("password") as any;
+    // const email = data.get("email") as any;
+    const firstName = googleUserObj
+      ? googleUserObj.firstName
+      : (data.get("firstName") as any);
+    const lastName = googleUserObj
+      ? googleUserObj.lastName
+      : (data.get("lastName") as any);
 
+    const uid = googleUserObj ? googleUserObj.uid : "Not Using Google Login";
+
+    const googleName = googleUserObj
+      ? googleUserObj.googleName
+      : "Not Using Google Login";
+
+    const email = googleUserObj
+      ? googleUserObj.email
+      : (data.get("email") as any);
+
+    const password = googleUserObj
+      ? "Google Login Managed"
+      : (data.get("password") as any);
     const createdAt = new Date();
+
     createUser({
       createdAt,
+      uid,
+      googleName,
+      password,
       firstName,
       lastName,
       email,
@@ -46,6 +66,7 @@ export const Signup: FC = () => {
     });
 
     const { _id } = await getUserByEmail(email);
+    console.log(_id);
     setLoggedUser(_id);
     setNewUser(true);
     navigate("/dashboard");
@@ -80,49 +101,58 @@ export const Signup: FC = () => {
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
+              {!googleUserObj ? (
+                <>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      autoComplete="given-name"
+                      name="firstName"
+                      required
+                      fullWidth
+                      id="firstName"
+                      label="First Name"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="lastName"
+                      label="Last Name"
+                      name="lastName"
+                      autoComplete="family-name"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      id="email"
+                      label="Email Address"
+                      name="email"
+                      autoComplete="email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      required
+                      fullWidth
+                      name="password"
+                      label="Password"
+                      type="password"
+                      id="password"
+                      autoComplete="new-password"
+                    />
+                  </Grid>
+                </>
+              ) : (
+                <></>
+              )}
               <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              {/* <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid> */}
-              <Grid item xs={12}>
+                <Typography component="h1" variant="h6">
+                  Select your Age Group
+                </Typography>
                 <Select
                   fullWidth
                   labelId="demo-simple-select-filled-label"

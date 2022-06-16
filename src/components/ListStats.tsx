@@ -1,5 +1,5 @@
 import { FormControl, FormLabel, Grid, Paper } from "@mui/material";
-import { FC, useContext, useState } from "react";
+import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
 import { getUserById } from "../services/user";
@@ -8,7 +8,7 @@ import { DashboardDailyCalories } from "./DashboardDailyCalories";
 import { DashboardDailyFoods } from "./DashboardDailyFoods";
 
 export const ListStats: FC = () => {
-  const { loggedUser } = useContext(GlobalVarContext);
+  const { loggedUser, googleUserObj } = useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [displayName, setDisplayName] = useState("display not set");
 
@@ -17,11 +17,17 @@ export const ListStats: FC = () => {
   }
 
   const stats = async () => {
-    const { firstName, lastName } = await getUserById(loggedUser);
-    setDisplayName(firstName + " " + lastName);
+    if (googleUserObj) {
+      setDisplayName(googleUserObj.googleName);
+    } else {
+      const { firstName, lastName } = await getUserById(loggedUser);
+      setDisplayName(firstName + " " + lastName);
+    }
   };
 
-  stats();
+  useEffect(() => {
+    stats();
+  }, []);
 
   return (
     <>
