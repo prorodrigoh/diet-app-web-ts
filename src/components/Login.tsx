@@ -21,24 +21,17 @@ import {
   signInWithPopup,
   connectAuthEmulator,
 } from "@firebase/auth";
+import API_KEY from "../credentials";
 
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "@firebase/app";
-import { resolve } from "path";
 import { getCurrentWeekGoalByUser } from "../services/goal";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 export const Login: FC = () => {
   // Your web app's Firebase configuration
-  const firebaseConfig = {
-    apiKey: "AIzaSyAUeHjWbC5d9d78T8316EDUxb4FccJHYGY",
-    authDomain: "diet-app-web.firebaseapp.com",
-    projectId: "diet-app-web",
-    storageBucket: "diet-app-web.appspot.com",
-    messagingSenderId: "644121539217",
-    appId: "1:644121539217:web:d127f058e4223f06e4c530",
-  };
+  const firebaseConfig = API_KEY;
 
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
