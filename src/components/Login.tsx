@@ -45,6 +45,9 @@ export const Login: FC = () => {
 
   const { setLoggedUser, setGoogleUserObj, setNewUser } =
     React.useContext(GlobalVarContext);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [message, setMessage] = React.useState("");
   let navigate = useNavigate();
 
   const theme = createTheme();
@@ -101,17 +104,22 @@ export const Login: FC = () => {
       });
   };
 
-  const emailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const email = data.get("email") as any;
-    const password = data.get("password");
+  const emailAuth = async () => {
+    if (!email || !password) {
+      setMessage("Invalid Email/Password");
+      return;
+    }
+
     const { _id } = await getUserByEmail(email);
     setLoggedUser(_id);
+    setNewUser(false);
     navigate("/dashboard");
   };
 
   const handleSignup = () => {
+    setLoggedUser("");
+    setGoogleUserObj("");
+    setNewUser(true);
     navigate("/signup");
   };
 
@@ -149,15 +157,12 @@ export const Login: FC = () => {
             <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
               <LockOutlinedIcon />
             </Avatar>
+
             <Typography component="h1" variant="h5">
               Welcome to your Diet App
             </Typography>
-            <Box
-              component="form"
-              noValidate
-              onSubmit={emailAuth}
-              sx={{ mt: 1 }}
-            >
+
+            <Box component="form" sx={{ mt: 1 }}>
               <TextField
                 margin="normal"
                 required
@@ -167,6 +172,8 @@ export const Login: FC = () => {
                 name="email"
                 autoComplete="email"
                 autoFocus
+                value={email}
+                onChange={(e) => setEmail(e.target.value as any)}
               />
               <TextField
                 margin="normal"
@@ -177,15 +184,23 @@ export const Login: FC = () => {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value as any)}
               />
               <Button
-                type="submit"
+                onClick={emailAuth}
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
               >
                 Continue your journey
               </Button>
+              <Typography component="h1" variant="h5" textAlign={"center"}>
+                {message}
+              </Typography>
+              <Typography component="h1" variant="h6" textAlign={"center"}>
+                OR
+              </Typography>
               <Button
                 onClick={googleLogin}
                 fullWidth
@@ -194,7 +209,9 @@ export const Login: FC = () => {
               >
                 Use your Google Account to continue your journey
               </Button>
-
+              <Typography component="h1" variant="h6" textAlign={"center"}>
+                OR
+              </Typography>
               <Button
                 onClick={handleSignup}
                 fullWidth
@@ -203,7 +220,6 @@ export const Login: FC = () => {
               >
                 Start your journey now !
               </Button>
-
               <Copyright sx={{ mt: 5 }} />
             </Box>
           </Box>

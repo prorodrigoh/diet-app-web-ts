@@ -61,7 +61,7 @@ export const ListStats: FC = () => {
         </Paper>
       </Grid>
       {/* Foods eaten at that day */}
-      <Grid item xs={12}>
+      <Grid item xs={12} md={12} lg={12}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <DashboardDailyFoods />
         </Paper>

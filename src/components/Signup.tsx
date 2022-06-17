@@ -20,7 +20,7 @@ import { Container, MenuItem, Select } from "@mui/material";
 import { Copyright } from "./Copyright";
 
 export const Signup: FC = () => {
-  const { setLoggedUser, setNewUser, googleUserObj } =
+  const { setLoggedUser, setNewUser, googleUserObj, setGoogleUserObj } =
     React.useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [ageGroup, setAgeGroup] = React.useState(0);
@@ -54,25 +54,32 @@ export const Signup: FC = () => {
       : (data.get("password") as any);
     const createdAt = new Date();
 
-    createUser({
-      createdAt,
-      uid,
-      googleName,
-      password,
-      firstName,
-      lastName,
-      email,
-      ageGroup,
-    });
+    const dataUser = await getUserByEmail(email);
+
+    if (!dataUser) {
+      createUser({
+        createdAt,
+        uid,
+        googleName,
+        password,
+        firstName,
+        lastName,
+        email,
+        ageGroup,
+      });
+      setNewUser(true);
+    }
 
     const { _id } = await getUserByEmail(email);
-    console.log(_id);
+
     setLoggedUser(_id);
-    setNewUser(true);
     navigate("/dashboard");
   };
 
   const handleSignIn = () => {
+    setLoggedUser("");
+    setGoogleUserObj("");
+    setNewUser("");
     navigate("/login");
   };
 
@@ -178,7 +185,7 @@ export const Signup: FC = () => {
               Make your first step now !
             </Button>
             <Button
-              type="submit"
+              // type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}

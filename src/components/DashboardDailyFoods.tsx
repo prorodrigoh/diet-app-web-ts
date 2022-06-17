@@ -34,20 +34,20 @@ export const DashboardDailyFoods: React.FC = () => {
         <TableHead>
           <TableRow>
             <TableCell align="center">Food Name</TableCell>
-            {/* <TableCell align="center">Iso Calories</TableCell>
-            <TableCell align="center">Iso Weight</TableCell> */}
-            <TableCell align="center">Weight Consumed</TableCell>
-            <TableCell align="center">Calories Consumed</TableCell>
+            <TableCell align="center">Iso Calories</TableCell>
+            <TableCell align="center">Iso Weight</TableCell>
+            {/* <TableCell align="center">Weight Consumed</TableCell>
+            <TableCell align="center">Calories Consumed</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
           {foods.map((row: any) => (
             <TableRow key={row._id}>
-              <TableCell align="center">{row.foodId}</TableCell>
-              {/* <TableCell align="center">{row.isoC}</TableCell>
-              <TableCell align="center">{row.isoW}</TableCell> */}
-              <TableCell align="center">{row.foodWeight}</TableCell>
-              <TableCell align="center">{row.foodCalories}</TableCell>
+              <TableCell align="center">{row.foodName}</TableCell>
+              <TableCell align="center">{row.isoCalories}</TableCell>
+              <TableCell align="center">{row.isoWeight}</TableCell>
+              {/* <TableCell align="center">{row.foodWeight}</TableCell>
+              <TableCell align="center">{row.foodCalories}</TableCell> */}
             </TableRow>
           ))}
         </TableBody>

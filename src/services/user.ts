@@ -15,7 +15,6 @@ export interface User {
 // http requests
 
 export const createUser = (user: User) => {
-  console.log(user);
   const client = getClient();
   const id = client.post("/signup", user);
   return id;

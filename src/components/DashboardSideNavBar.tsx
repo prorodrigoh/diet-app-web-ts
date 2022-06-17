@@ -13,7 +13,7 @@ import { GlobalVarContext } from "../App";
 import { FC } from "react";
 
 export const DashboardSideNavBar: FC = () => {
-  const { loggedUser, setLoggedUser, newUser } =
+  const { loggedUser, setLoggedUser, newUser, setGoogleUserObj } =
     React.useContext(GlobalVarContext);
   let navigate = useNavigate();
 
@@ -55,6 +55,7 @@ export const DashboardSideNavBar: FC = () => {
         <ListItemButton
           onClick={() => {
             setLoggedUser("");
+            setGoogleUserObj("");
             navigate("/login");
           }}
         >
