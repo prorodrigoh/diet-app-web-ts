@@ -188,7 +188,7 @@ export const Daily: React.FC = () => {
                 placeholder="Food Weight (g)"
                 onChange={handleInputWeight}
               />
-              {!foodWeight ? (
+              {!foodWeight || !foodId ? (
                 <Button disabled>Add Food</Button>
               ) : (
                 <Button

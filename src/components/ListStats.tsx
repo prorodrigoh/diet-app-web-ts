@@ -1,4 +1,4 @@
-import { FormControl, FormLabel, Grid, Paper } from "@mui/material";
+import { Grid, Paper, Typography } from "@mui/material";
 import { FC, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GlobalVarContext } from "../App";
@@ -31,11 +31,14 @@ export const ListStats: FC = () => {
 
   return (
     <>
-      <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
+      {/* <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
         <FormLabel>Welcome {displayName} to your Dashboard</FormLabel>
-      </FormControl>
+      </FormControl> */}
+      <Typography component="h1" variant="h6" textAlign={"center"}>
+        Welcome {displayName}
+      </Typography>
       {/* Week daily calories variance */}
-      <Grid item xs={12} md={8} lg={9}>
+      <Grid item xs={12} md={12} lg={9} id="grid-dashboard-chart">
         <Paper
           sx={{
             p: 2,
@@ -48,20 +51,20 @@ export const ListStats: FC = () => {
         </Paper>
       </Grid>
       {/* Amount of calories left for the day */}
-      <Grid item xs={12} md={4} lg={3}>
+      <Grid item xs={12} md={12} lg={3} id="grid-dashboard-DC">
         <Paper
           sx={{
             p: 2,
             display: "flex",
             flexDirection: "column",
-            height: 360,
+            // height: 360,
           }}
         >
           <DashboardDailyCalories />
         </Paper>
       </Grid>
       {/* Foods eaten at that day */}
-      <Grid item xs={12} md={12} lg={12}>
+      <Grid item xs={12} md={12} lg={9} id="grid-dashboard-DF">
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <DashboardDailyFoods />
         </Paper>

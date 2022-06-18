@@ -32,18 +32,16 @@ export const DashboardSideNavBar: FC = () => {
               </ListItemIcon>
               <ListItemText primary="Add existing Food" />
             </ListItemButton>
+            <ListItemButton onClick={() => navigate("/food")}>
+              <ListItemIcon>
+                <AssignmentIcon />
+              </ListItemIcon>
+              <ListItemText primary="Create a new Food" />
+            </ListItemButton>
           </>
         ) : (
           <></>
         )}
-        <>
-          <ListItemButton onClick={() => navigate("/food")}>
-            <ListItemIcon>
-              <AssignmentIcon />
-            </ListItemIcon>
-            <ListItemText primary="Create a new Food" />
-          </ListItemButton>
-        </>
         {/* --------------------------------------- */}
         <ListItemButton onClick={() => navigate("/goal")}>
           <ListItemIcon>

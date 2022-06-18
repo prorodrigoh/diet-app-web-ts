@@ -105,7 +105,8 @@ export const Login: FC = () => {
 
     const { _id } = await getUserByEmail(email);
     setLoggedUser(_id);
-    setNewUser(false);
+    const res = await getCurrentWeekGoalByUser(_id as any);
+    res ? setNewUser(true) : setNewUser(false);
     navigate("/dashboard");
   };
 
@@ -151,8 +152,11 @@ export const Login: FC = () => {
               <LockOutlinedIcon />
             </Avatar>
 
-            <Typography component="h1" variant="h5">
-              Welcome to your Diet App
+            <Typography component="h1" variant="h6">
+              Welcome to
+            </Typography>
+            <Typography component="h1" variant="h4">
+              Slim Steady
             </Typography>
 
             <Box component="form" sx={{ mt: 1 }}>

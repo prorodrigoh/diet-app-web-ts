@@ -230,6 +230,7 @@ export const Goal: FC = () => {
                 </Select>
               ) : (
                 <Select
+                  fullWidth
                   labelId="demo-simple-select-filled-label"
                   id="demo-simple-select-filled"
                   value={trainingFactor}

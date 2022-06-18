@@ -147,7 +147,7 @@ export const Dashboard: React.FC = () => {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
+            <Grid container spacing={3} flexDirection="row">
               <ListStats />
             </Grid>
             <Copyright sx={{ pt: 4 }} />

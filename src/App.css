@@ -1,3 +1,29 @@
 .App {
   text-align: center;
 }
+
+@media screen and (max-width: 1023px) {
+  #grid-dashboard-chart {
+    display: none;
+  }
+  #grid-dashboard-calories {
+    display: flex;
+    flex-direction: "row";
+  }
+  #grid-dashboard-foods {
+    display: flex;
+    flex-direction: "row";
+  }
+}
+
+@media screen and (max-width: 359px) {
+  #grid-dashboard-chart {
+    display: none;
+  }
+  #grid-dashboard-DC {
+    display: none;
+  }
+  #grid-dashboard-DF {
+    display: none;
+  }
+}
