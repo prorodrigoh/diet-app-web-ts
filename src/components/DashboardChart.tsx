@@ -30,6 +30,11 @@ export const DashboardChart: FC = () => {
   function createData(time: string, amount?: number) {
     return { time, amount };
   }
+
+  // have to create a new API endpoint
+  // it returns dailyCalories and DaysToWeightIn from the last entry in the dailygoal collection
+  // where daysToWeightIn in [1-7]
+
   // const limit = 2000;
   // let data7 = limit,
   //   data6 = limit,
@@ -38,30 +43,6 @@ export const DashboardChart: FC = () => {
   //   data3 = limit,
   //   data2 = limit,
   //   data1 = limit;
-
-  // switch (chartDaysToWeightIn) {
-  //   case 7:
-  //     data7 = chartDailyCalories;
-  //     break;
-  //   case 6:
-  //     data6 = chartDailyCalories;
-  //     break;
-  //   case 5:
-  //     data5 = chartDailyCalories;
-  //     break;
-  //   case 4:
-  //     data4 = chartDailyCalories;
-  //     break;
-  //   case 3:
-  //     data3 = chartDailyCalories;
-  //     break;
-  //   case 2:
-  //     data2 = chartDailyCalories;
-  //     break;
-  //   case 1:
-  //     data1 = chartDailyCalories;
-  //     break;
-  // }
 
   // const data = [
   //   createData("7", data7),
