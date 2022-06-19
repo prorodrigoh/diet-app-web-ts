@@ -38,7 +38,7 @@ export const ListStats: FC = () => {
         Welcome {displayName}
       </Typography>
       {/* Week daily calories variance */}
-      <Grid item xs={12} md={12} lg={9} id="grid-dashboard-chart">
+      {/* <Grid item xs={12} md={12} lg={9} id="grid-dashboard-chart">
         <Paper
           sx={{
             p: 2,
@@ -49,7 +49,7 @@ export const ListStats: FC = () => {
         >
           <DashboardChart />
         </Paper>
-      </Grid>
+      </Grid> */}
       {/* Amount of calories left for the day */}
       <Grid item xs={12} md={12} lg={3} id="grid-dashboard-DC">
         <Paper

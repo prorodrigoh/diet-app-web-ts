@@ -17,7 +17,6 @@ export const createDailyGoal = (dailyGoal: DailyGoal) => {
 
 export const updateCaloriesDailyGoal = (goalId: string, value: number) => {
   const client = getClient();
-  console.log(`/updatecaldailygoal/${goalId}`, value);
   const retUpd = client.patch(`/updatecaldailygoal/${goalId}`, {
     dailyCalories: value,
   });
