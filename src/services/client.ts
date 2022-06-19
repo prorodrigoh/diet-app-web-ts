@@ -3,7 +3,7 @@ import axios from "axios";
 export const getClient = () => {
   return axios.create({
     // this is the address where the api is running
-    // baseURL: "https://diet-app-api.web.app",
-    baseURL: "http://localhost:5050",
+    baseURL: "https://diet-app-api.web.app",
+    // baseURL: "http://localhost:5050",
   });
 };
