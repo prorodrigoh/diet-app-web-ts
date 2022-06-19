@@ -101,12 +101,12 @@ export const Daily: React.FC = () => {
     const goalId = data[0]._id;
     const dailyCalories = Math.floor(data[0].currentCalories - foodCalories); //foodcalories comes from calculateCPW
     const daysToWeightIn = 7;
-    console.log(
-      "addNewDailyGoal - createDailyGoal",
-      goalId,
-      dailyCalories,
-      daysToWeightIn
-    );
+    // console.log(
+    //   "addNewDailyGoal - createDailyGoal",
+    //   goalId,
+    //   dailyCalories,
+    //   daysToWeightIn
+    // );
     createDailyGoal({
       goalId,
       dailyCalories,
@@ -122,12 +122,12 @@ export const Daily: React.FC = () => {
     const dailyCalories = Math.floor(data[0].currentCalories - foodCalories); //foodcalories comes from calculateCPW
     const daysToWeightIn = newDaystoWeightIn;
 
-    console.log(
-      "addNextDailyGoal - createDailyGoal",
-      goalId,
-      dailyCalories,
-      daysToWeightIn
-    );
+    // console.log(
+    //   "addNextDailyGoal - createDailyGoal",
+    //   goalId,
+    //   dailyCalories,
+    //   daysToWeightIn
+    // );
     createDailyGoal({
       goalId,
       dailyCalories,
@@ -143,7 +143,7 @@ export const Daily: React.FC = () => {
 
     const goalId = data[0]._id;
     const dailyCalories = Math.floor(data[0].dailyCalories - foodCalories); //foodcalories comes from calculateCPW
-    console.log("updateDailyGoal", goalId, dailyCalories);
+    // console.log("updateDailyGoal", goalId, dailyCalories);
     const resultUpd = await updateCaloriesDailyGoal(goalId, dailyCalories);
   };
 
