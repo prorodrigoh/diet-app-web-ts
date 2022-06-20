@@ -106,7 +106,7 @@ export const Login: FC = () => {
     const { _id } = await getUserByEmail(email);
     setLoggedUser(_id);
     const res = await getCurrentWeekGoalByUser(_id as any);
-    res ? setNewUser(true) : setNewUser(false);
+    res ? setNewUser(false) : setNewUser(true);
     navigate("/dashboard");
   };
 

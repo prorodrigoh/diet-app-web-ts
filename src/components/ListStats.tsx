@@ -31,17 +31,16 @@ export const ListStats: FC = () => {
 
   return (
     <>
-      {/* <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
-        <FormLabel>Welcome {displayName} to your Dashboard</FormLabel>
-      </FormControl> */}
-      <Typography
-        component="h1"
-        variant="h6"
-        textAlign={"center"}
-        marginLeft="10"
-      >
-        Welcome {displayName}
-      </Typography>
+      <Grid item xs={12} md={12} lg={12} id="grid-dashboard-welcome">
+        <Typography
+          component="h1"
+          variant="h5"
+          textAlign={"center"}
+          marginLeft="100"
+        >
+          Welcome {displayName}
+        </Typography>
+      </Grid>
       {/* Week daily calories variance */}
       <Grid item xs={12} md={12} lg={9} id="grid-dashboard-chart">
         <Paper
@@ -62,14 +61,14 @@ export const ListStats: FC = () => {
             p: 2,
             display: "flex",
             flexDirection: "column",
-            // height: 360,
+            height: 360,
           }}
         >
           <DashboardDailyCalories />
         </Paper>
       </Grid>
       {/* Foods eaten at that day */}
-      <Grid item xs={12} md={12} lg={9} id="grid-dashboard-DF">
+      <Grid item xs={12} md={12} lg={12} id="grid-dashboard-DF">
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <DashboardDailyFoods />
         </Paper>

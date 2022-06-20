@@ -20,8 +20,13 @@ import { Container, MenuItem, Select } from "@mui/material";
 import { Copyright } from "./Copyright";
 
 export const Signup: FC = () => {
-  const { setLoggedUser, setNewUser, googleUserObj, setGoogleUserObj } =
-    React.useContext(GlobalVarContext);
+  const {
+    loggedUser,
+    setLoggedUser,
+    setNewUser,
+    googleUserObj,
+    setGoogleUserObj,
+  } = React.useContext(GlobalVarContext);
   let navigate = useNavigate();
   const [ageGroup, setAgeGroup] = React.useState(0);
 
@@ -57,7 +62,7 @@ export const Signup: FC = () => {
     const dataUser = await getUserByEmail(email);
 
     if (!dataUser) {
-      createUser({
+      const ret = await createUser({
         createdAt,
         uid,
         googleName,
@@ -67,12 +72,16 @@ export const Signup: FC = () => {
         email,
         ageGroup,
       });
+      const { _id } = await getUserByEmail(email);
       setNewUser(true);
+      setLoggedUser(ret.data);
+      // console.log(ret.data, _id);
+      navigate("/dashboard");
+      return;
     }
 
-    const { _id } = await getUserByEmail(email);
-
-    setLoggedUser(_id);
+    setLoggedUser(dataUser._id);
+    // console.log(dataUser._id);
     navigate("/dashboard");
   };
 

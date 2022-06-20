@@ -42,6 +42,7 @@ export const DashboardDailyCalories: FC = () => {
   const stats = async () => {
     // weekgoal
     if (!newUser) {
+      console.log("here");
       const dataWeek = await getCurrentWeekGoalByUser(loggedUser);
       setDisplayCurrentWeight(dataWeek[0].currentWeight);
       setDisplayCurrentCalories(dataWeek[0].currentCalories);
@@ -50,10 +51,11 @@ export const DashboardDailyCalories: FC = () => {
       // get the last entry in the dailyGoal
       const dataDay = await getCurrentDailyGoalByUser(loggedUser);
       // verify how many day have passed since
-      const lastEntry = dateDiffInDays(
-        new Date(),
-        new Date(dataDay[0].createdAt)
-      );
+      let lastEntry = 0;
+
+      if (dataDay.length !== 0) {
+        lastEntry = dateDiffInDays(new Date(), new Date(dataDay[0].createdAt));
+      }
 
       // check if the last Daily goal if NOT from TODAY
       if (dataDay && lastEntry !== 0) {
@@ -64,10 +66,12 @@ export const DashboardDailyCalories: FC = () => {
         return;
       }
 
-      // dailygoal if it is from the same day
-      setDisplayDaysToWeightIn(dataDay[0].daysToWeightIn);
-      setDisplayCaloriesLeft(dataDay[0].dailyCalories);
-      // setChartDailyCalories(dataDay[0].dailyCalories);
+      if (dataDay && lastEntry === 0) {
+        // dailygoal if it is from the same day
+        setDisplayDaysToWeightIn(dataDay[0].daysToWeightIn);
+        setDisplayCaloriesLeft(dataDay[0].dailyCalories);
+        // setChartDailyCalories(dataDay[0].dailyCalories);
+      }
     }
   };
 

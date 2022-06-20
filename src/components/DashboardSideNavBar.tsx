@@ -20,7 +20,7 @@ export const DashboardSideNavBar: FC = () => {
   if (!loggedUser) {
     navigate("/login");
   }
-
+  console.log(newUser);
   return (
     <>
       <List component="nav">

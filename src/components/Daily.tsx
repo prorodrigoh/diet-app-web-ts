@@ -81,12 +81,12 @@ export const Daily: React.FC = () => {
 
   const checkIfDailyGoalExists = async () => {
     const dataBefore = await getCurrentDailyGoalByUser(loggedUser);
-    difference = dateDiffInDays(new Date(), new Date(dataBefore[0].createdAt));
-    newDaystoWeightIn = dataBefore[0].daysToWeightIn - difference;
     // check if it a new WeekGoal - if so, addNewDailyGoal
     if (dataBefore.length === 0) {
       return 0;
     }
+    difference = dateDiffInDays(new Date(), new Date(dataBefore[0].createdAt));
+    newDaystoWeightIn = dataBefore[0].daysToWeightIn - difference;
     // check if the day has passed - if so, addNextDailyGoal
     if (difference !== 0) {
       return 1;
@@ -117,7 +117,7 @@ export const Daily: React.FC = () => {
   // Happens when the date changes - we create a new doc with DaysToWeightIn = Previous DaysToWeightIn - 1
   const addNextDailyGoal = async () => {
     const data = await getCurrentWeekGoalByUser(loggedUser);
-    console.log(data[0]);
+    // console.log(data[0]);
     const goalId = data[0]._id;
     const dailyCalories = Math.floor(data[0].currentCalories - foodCalories); //foodcalories comes from calculateCPW
     const daysToWeightIn = newDaystoWeightIn;

@@ -91,7 +91,7 @@ export const Goal: FC = () => {
   };
 
   const createWeekGoal = async (userId: string) => {
-    const id = createGoal({
+    const id = await createGoal({
       userId,
       trainingFactor,
       previousWeight,
@@ -99,14 +99,18 @@ export const Goal: FC = () => {
       currentWeight,
       currentCalories,
     });
-    setNewUser(false);
-    return id;
+    if (id) {
+      setNewUser(false);
+      return id;
+    }
+    console.log("createWeekGoal - Fail");
   };
 
   const checkIfWeekGoalExists = async () => {
     const dataBefore = await getCurrentWeekGoalByUser(loggedUser);
     // check if collection is empty
     if (dataBefore.length === 0) {
+      console.log("checkIfWeekGoalExists - false");
       return false;
     }
     previousWeight = dataBefore[0].currentWeight;
