@@ -34,7 +34,12 @@ export const ListStats: FC = () => {
       {/* <FormControl variant="filled" sx={{ m: 1, minWidth: 300 }}>
         <FormLabel>Welcome {displayName} to your Dashboard</FormLabel>
       </FormControl> */}
-      <Typography component="h1" variant="h6" textAlign={"center"}>
+      <Typography
+        component="h1"
+        variant="h6"
+        textAlign={"center"}
+        marginLeft="10"
+      >
         Welcome {displayName}
       </Typography>
       {/* Week daily calories variance */}

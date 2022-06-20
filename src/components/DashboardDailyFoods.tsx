@@ -29,7 +29,7 @@ export const DashboardDailyFoods: React.FC = () => {
 
   return (
     <React.Fragment>
-      <Title>Foods of the day</Title>
+      <Title>Foods Recorded</Title>
       <Table size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>

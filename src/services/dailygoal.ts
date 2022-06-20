@@ -30,3 +30,17 @@ export const getCurrentDailyGoalByUser = async (userId: string) => {
   ({ data } = await client.get(`/dailygoalbygoalid/${data[0]._id}`));
   return data;
 };
+
+export const getLastDailyGoalOfTheDayByUser = async (
+  userId: string,
+  day: number
+) => {
+  const client = getClient();
+
+  let { data } = await client.get(`/currentweekgoalbyuser/${userId}`);
+  ({ data } = await client.get(
+    `/lastdailygoalofthedaybygoalid/${data[0]._id}/${day}`
+  ));
+
+  return data;
+};

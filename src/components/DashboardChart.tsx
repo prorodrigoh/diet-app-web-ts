@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import Title from "./DashboardTitle";
 import { GlobalVarContext } from "../App";
+import { getLastDailyGoalOfTheDayByUser } from "../services/dailygoal";
 
 // Phase 2
 // get data from DB
@@ -31,44 +32,37 @@ export const DashboardChart: FC = () => {
     return { time, amount };
   }
 
+  // let dbData: Array<{}> = [];
+  const data = [
+    createData("7", 18),
+    createData("6", 170),
+    createData("5", 50),
+    createData("4", 65),
+    createData("3", -170),
+    createData("2", 20),
+    createData("1", 10),
+  ];
+
+  // const getData = async () => {
+  //   for (let i = 7; i > 0; i--) {
+  //     const calories = await getLastDailyGoalOfTheDayByUser(loggedUser, i);
+  //     dbData.push({ i, calories });
+  //   }
+  // };
+
+  // React.useEffect(() => {
+  //   getData();
+  // }, []);
+
   // have to create a new API endpoint
   // it returns dailyCalories and DaysToWeightIn from the last entry in the dailygoal collection
   // where daysToWeightIn in [1-7]
-
-  // const limit = 2000;
-  // let data7 = limit,
-  //   data6 = limit,
-  //   data5 = limit,
-  //   data4 = limit,
-  //   data3 = limit,
-  //   data2 = limit,
-  //   data1 = limit;
-
-  // const data = [
-  //   createData("7", data7),
-  //   createData("6", data6),
-  //   createData("5", data5),
-  //   createData("4", data4),
-  //   createData("3", data3),
-  //   createData("2", data2),
-  //   createData("1", data1),
-  // ];
-
-  const data = [
-    createData("7", 1850),
-    createData("6", 1750),
-    createData("5", 1800),
-    createData("4", 1650),
-    createData("3", 1700),
-    createData("2", 1650),
-    createData("1", 1700),
-  ];
 
   const theme = useTheme();
 
   return (
     <React.Fragment>
-      <Title>Week Calories Intake Variation - Future Feature</Title>
+      <Title>Calories Under/Over the goal on the day - Future Feature</Title>
       <ResponsiveContainer>
         <LineChart
           data={data}
