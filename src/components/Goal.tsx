@@ -172,7 +172,7 @@ export const Goal: FC = () => {
           >
             <Box component="form" noValidate sx={{ mt: 1 }}>
               <Typography component="h1" variant="h4" textAlign={"center"}>
-                Calculate your calories weekly goal
+                Let's calculate your weekly calories goal
               </Typography>
               <TextField
                 margin="normal"
@@ -254,9 +254,10 @@ export const Goal: FC = () => {
                 </Select>
               )}
 
-              <Typography component="h1" variant="h6" textAlign={"center"}>
+              {/* <Typography component="h1" variant="h6" textAlign={"center"}>
                 Set your Goals for the week
-              </Typography>
+              </Typography> */}
+
               {currentWeight === -1 || trainingFactor === -1 ? (
                 <Button disabled>Save</Button>
               ) : (

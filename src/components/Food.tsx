@@ -126,9 +126,9 @@ export const NewFood: FC = () => {
                 onChange={(e) => setIsoCalories(e.target.value as any)}
               />
 
-              <Typography component="h1" variant="h6" textAlign={"center"}>
+              {/* <Typography component="h1" variant="h6" textAlign={"center"}>
                 Set your Goals for the week
-              </Typography>
+              </Typography> */}
 
               {!foodName || !isoWeight || !isoCalories ? (
                 <Button disabled>Save</Button>
