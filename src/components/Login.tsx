@@ -19,7 +19,6 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  connectAuthEmulator,
 } from "@firebase/auth";
 import API_KEY from "../credentials";
 
@@ -44,12 +43,6 @@ export const Login: FC = () => {
   let navigate = useNavigate();
 
   const theme = createTheme();
-
-  // const auth = connectAuthEmulator();
-  // signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
-  //   .then((res) => setLoggedUser(res.user))
-  //   .then(() => navigate("/dashboard"))
-  //   .catch(console.error);
 
   const googleLogin = () => {
     const auth = getAuth(app);
@@ -94,6 +87,7 @@ export const Login: FC = () => {
         const errorMessage = error.errorMessage;
         const email = error.customData.email;
         const credential = GoogleAuthProvider.credentialFromError(error);
+        console.log(errorCode, errorMessage, email, credential);
       });
   };
 
@@ -103,10 +97,22 @@ export const Login: FC = () => {
       return;
     }
 
-    const { _id } = await getUserByEmail(email);
-    setLoggedUser(_id);
-    const res = await getCurrentWeekGoalByUser(_id as any);
-    res ? setNewUser(false) : setNewUser(true);
+    const auth = getAuth(app);
+    signInWithEmailAndPassword(auth, email!, password!) // Login with Firebase Authentication API
+      .then(() => getUserByEmail(email))
+      .then((res) => {
+        setLoggedUser(res._id);
+        const result = getCurrentWeekGoalByUser(res._id as any);
+        return result;
+      })
+      .then((res) => (res ? setNewUser(false) : setNewUser(true)))
+      .then(() => navigate("/dashboard"))
+      .catch(console.error);
+
+    // const { _id } = await getUserByEmail(email);
+    // setLoggedUser(_id);
+    // const res = await getCurrentWeekGoalByUser(_id as any);
+    // res ? setNewUser(false) : setNewUser(true);
     navigate("/dashboard");
   };
 

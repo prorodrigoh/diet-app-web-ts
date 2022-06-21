@@ -18,8 +18,16 @@ import { GlobalVarContext } from "../App";
 import { createUser, getUserByEmail } from "../services/user";
 import { Container, MenuItem, Select } from "@mui/material";
 import { Copyright } from "./Copyright";
+import { createUserWithEmailAndPassword, getAuth } from "@firebase/auth";
+import { initializeApp } from "@firebase/app";
+import API_KEY from "../credentials";
 
 export const Signup: FC = () => {
+  // Your web app's Firebase configuration
+  const firebaseConfig = API_KEY;
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
   const {
     loggedUser,
     setLoggedUser,
@@ -56,7 +64,13 @@ export const Signup: FC = () => {
 
     const password = googleUserObj
       ? "Google Login Managed"
-      : (data.get("password") as any);
+      : "Firebase Managed";
+
+    let password1 = "";
+    if (password === "Firebase Managed") {
+      password1 = data.get("password") as any;
+    }
+
     const createdAt = new Date();
 
     const dataUser = await getUserByEmail(email);
@@ -72,11 +86,18 @@ export const Signup: FC = () => {
         email,
         ageGroup,
       });
-      const { _id } = await getUserByEmail(email);
-      setNewUser(true);
-      setLoggedUser(ret.data);
-      // console.log(ret.data, _id);
-      navigate("/dashboard");
+      const auth = getAuth(app);
+      createUserWithEmailAndPassword(auth, email!, password1!)
+        .then(() => getUserByEmail(email))
+        .then((res) => setLoggedUser(res._id))
+        .then(() => setNewUser(true))
+        .then(() => navigate("/dashboard"))
+        .catch(console.error);
+      // const { _id } = await getUserByEmail(email);
+      // setNewUser(true);
+      // setLoggedUser(ret.data);
+      // // console.log(ret.data, _id);
+      // navigate("/dashboard");
       return;
     }
 
